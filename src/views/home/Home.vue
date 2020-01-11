@@ -98,7 +98,9 @@ import FeatureView from './childComps/FeatureView';
 import NavBar from "components/common/navbar/NavBar"
 import TabControl from 'components/content/tabControl/TabControl';
 
-import { getHomeMultidata } from "network/home"
+import { getHomeMultidata, getHomeGoods } from "network/home"
+import { get } from 'http';
+
 
 
 export default {
@@ -115,7 +117,11 @@ export default {
     return {
       banners: [],
       recommends: [],
-      // result: null
+      goods: {
+        'pop': {page: 0, list: []},
+        'new': {page: 0, list: []},
+        'sell': {page: 0, list: []}
+      }
     }
   },
   created() {
@@ -125,6 +131,10 @@ export default {
       // this.result = res
       this.banners = res.data.banner.list;
       this.recommends = res.data.recommend.list;
+    }),
+    // 2.请求商品数据
+    getHomeGoods('pop',1).then(res =>{
+      console.log(res);
     })
   }
 }
