@@ -2,31 +2,30 @@
   
  <div id="home">
     <nav-bar class="home-nav"><template #center><div>购物街</div></template></nav-bar>
-      <scroll class="home-scroll">
+      <scroll class="home-scroll" ref="homeScroll" :probe-type="3" @scroll="onScroll"> 
         <home-swiper :banners="banners"></home-swiper>
         <home-recommend-view :recommends="recommends"></home-recommend-view>
         <feature-view ></feature-view>
         <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"></tab-control>
         <goods-list :goods="showGoods"></goods-list>
       </scroll>
+      <back-top @click.native="backTopClick" v-show="showBackTopBtn"></back-top>
   </div>
  
 </template>
 
 <script>
-import HomeSwiper from "./childComps/HomeSwiper"
-import HomeRecommendView from "./childComps/HomeRecommendView"
-import FeatureView from "./childComps/FeatureView"
+import HomeSwiper from './childComps/HomeSwiper'
+import HomeRecommendView from './childComps/HomeRecommendView'
+import FeatureView from './childComps/FeatureView'
 
-import NavBar from "components/common/navbar/NavBar"
-import TabControl from "components/content/tabControl/TabControl"
-import GoodsList from "components/content/goods/GoodsList"
-import Scroll from 'components/common/scroll/Scroll';
+import NavBar from 'components/common/navbar/NavBar'
+import TabControl from 'components/content/tabControl/TabControl'
+import GoodsList from 'components/content/goods/GoodsList'
+import Scroll from 'components/common/scroll/Scroll'
+import BackTop from 'components/content/backTop/BackTop'
 
 import { getHomeMultidata, getHomeGoods } from "network/home"
-
-
-
 
 
 export default {
@@ -39,7 +38,8 @@ export default {
     NavBar,
     TabControl,
     GoodsList,
-    Scroll
+    Scroll,
+    BackTop
   },
   data() {
     return {
@@ -53,8 +53,10 @@ export default {
       type: ['pop','new','sell'],
       index: 0,
       BScroll: null,
+      showBackTopBtn: false
     }
   },
+
   methods: {
     getHomeMultidata() {
       getHomeMultidata().then(res => {
@@ -75,13 +77,27 @@ export default {
 
     tabClick(index) {
       this.index = index
+    },
+
+    backTopClick() {
+      this.$refs.homeScroll.scrollTo(0,0,500)
+    },
+
+    onScroll(position) {
+      if(position.y > -500){
+        this.showBackTopBtn = false
+      }else{
+        this.showBackTopBtn = true
+      }
     }
   },
+
   computed: {
     showGoods() {
       return this.goods[this.type[this.index]].list
     }
   },
+
   created() {
     // 1.请求多个数据
     this.getHomeMultidata()
