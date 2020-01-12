@@ -2,7 +2,12 @@
   
  <div id="home">
     <nav-bar class="home-nav"><template #center><div>购物街</div></template></nav-bar>
-      <scroll class="home-scroll" ref="homeScroll" :probe-type="3" @scroll="onScroll"> 
+      <scroll class="home-scroll" 
+              ref="homeScroll" 
+              :probe-type="3" 
+              :pull-up-load="true"
+              @scroll="onScroll"
+              @pullingUp="loadMore"> 
         <home-swiper :banners="banners"></home-swiper>
         <home-recommend-view :recommends="recommends"></home-recommend-view>
         <feature-view ></feature-view>
@@ -50,7 +55,6 @@ export default {
         'new': {page: 0, list: []},
         'sell': {page: 0, list: []}
       },
-      type: ['pop','new','sell'],
       index: 0,
       BScroll: null,
       showBackTopBtn: false
@@ -72,6 +76,8 @@ export default {
       getHomeGoods(type, page).then(res =>{
       this.goods[type].list.push(...res.data.list) //解构数组
       this.goods[type].page += 1
+      this.$refs.homeScroll.scroll.refresh()//暂时写这里,还得改的
+      this.$refs.homeScroll.finishPullUp()
     })
     },
 
@@ -89,12 +95,31 @@ export default {
       }else{
         this.showBackTopBtn = true
       }
+    },
+
+    loadMore() {
+      this.getHomeGoods(this.currentType)
     }
   },
 
   computed: {
+    currentType() {
+      switch (this.index) {
+        case 0:
+          return 'pop'
+          break;
+        case 1:
+          return 'new'
+          break;
+        case 2:
+          return 'sell'
+          break;
+        default:
+          return 'pop'
+      }
+    },
     showGoods() {
-      return this.goods[this.type[this.index]].list
+      return this.goods[this.currentType].list
     }
   },
 
