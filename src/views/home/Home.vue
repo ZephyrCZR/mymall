@@ -1,12 +1,16 @@
 <template>
-  <div id="home">
+  
+ <div id="home">
     <nav-bar class="home-nav"><template #center><div>购物街</div></template></nav-bar>
-    <home-swiper :banners="banners"></home-swiper>
-    <home-recommend-view :recommends="recommends"></home-recommend-view>
-    <feature-view ></feature-view>
-    <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"></tab-control>
-    <goods-list :goods="showGoods"></goods-list>
+      <scroll class="home-scroll">
+        <home-swiper :banners="banners"></home-swiper>
+        <home-recommend-view :recommends="recommends"></home-recommend-view>
+        <feature-view ></feature-view>
+        <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"></tab-control>
+        <goods-list :goods="showGoods"></goods-list>
+      </scroll>
   </div>
+ 
 </template>
 
 <script>
@@ -17,8 +21,11 @@ import FeatureView from "./childComps/FeatureView"
 import NavBar from "components/common/navbar/NavBar"
 import TabControl from "components/content/tabControl/TabControl"
 import GoodsList from "components/content/goods/GoodsList"
+import Scroll from 'components/common/scroll/Scroll';
 
 import { getHomeMultidata, getHomeGoods } from "network/home"
+
+
 
 
 
@@ -31,7 +38,8 @@ export default {
 
     NavBar,
     TabControl,
-    GoodsList
+    GoodsList,
+    Scroll
   },
   data() {
     return {
@@ -43,7 +51,8 @@ export default {
         'sell': {page: 0, list: []}
       },
       type: ['pop','new','sell'],
-      index: 0
+      index: 0,
+      BScroll: null,
     }
   },
   methods: {
@@ -84,15 +93,21 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #home {
   padding-top: 44px;
+  padding-bottom: 49px;
+  height: 100vh;
+}
+
+.home-scroll {
+  height: 100%;
+  overflow: hidden;
 }
 
 .home-nav {
   background-color: var(--color-tint);
   color: #fff;
-
   position: fixed;
   top: 0;
   left: 0;
