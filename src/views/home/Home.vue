@@ -2,6 +2,7 @@
   
  <div id="home">
     <nav-bar class="home-nav"><template #center><div>购物街</div></template></nav-bar>
+     <tab-control id="tab-control" ref="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick" v-show="showTabControl"></tab-control>
       <scroll class="home-scroll" 
               ref="homeScroll" 
               :probe-type="3" 
@@ -11,7 +12,7 @@
         <home-swiper :banners="banners"></home-swiper>
         <home-recommend-view :recommends="recommends"></home-recommend-view>
         <feature-view ></feature-view>
-        <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"></tab-control>
+        <tab-control ref="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick"></tab-control>
         <goods-list :goods="showGoods"></goods-list>
       </scroll>
       <back-top @click.native="backTopClick" v-show="showBackTopBtn"></back-top>
@@ -31,7 +32,7 @@ import Scroll from 'components/common/scroll/Scroll'
 import BackTop from 'components/content/backTop/BackTop'
 
 import { getHomeMultidata, getHomeGoods } from "network/home"
-
+import { debounce } from "common/utils"
 
 export default {
   name: 'Home',
@@ -57,15 +58,15 @@ export default {
       },
       index: 0,
       BScroll: null,
-      showBackTopBtn: false
+      showBackTopBtn: false,
+      showTabControl: false,
+      offsetTop: 0
     }
   },
 
   methods: {
     getHomeMultidata() {
       getHomeMultidata().then(res => {
-      // console.log("res="+res)
-      // this.result = res
       this.banners = res.data.banner.list;
       this.recommends = res.data.recommend.list;
     })
@@ -76,7 +77,6 @@ export default {
       getHomeGoods(type, page).then(res =>{
       this.goods[type].list.push(...res.data.list) //解构数组
       this.goods[type].page += 1
-      // this.$refs.homeScroll.scroll.refresh()//暂时写这里,还得改的
       this.$refs.homeScroll.finishPullUp()
     })
     },
@@ -90,29 +90,17 @@ export default {
     },
 
     onScroll(position) {
-      if(position.y > -500){
-        this.showBackTopBtn = false
-      }else{
-        this.showBackTopBtn = true
-      }
+      // 1. 判断是否显示backTop按钮
+      this.showBackTopBtn = -position.y > 500
+
+      // 2. 判断是否显示tabControl按钮
+      this.offsetTop = this.$refs.tabControl.$el.offsetTop
+      this.showTabControl = -position.y > this.offsetTop
     },
 
     loadMore() {
       this.getHomeGoods(this.currentType)
-    },
-
-    debounce(func, delay) {
-      let timer = null
-      return function (...args) {
-        if(timer) clearTimeout(timer)
-
-        timer = setTimeout(() => {
-          func.apply(this, args)
-        }, delay)
-      }
-    },
-
-    
+    }
   },
 
   computed: {
@@ -150,7 +138,7 @@ export default {
 
   mounted() {
     // 刷新可滚动页面长度
-    const refresh = this.debounce(this.$refs.homeScroll.refresh,300)
+    const refresh = debounce(this.$refs.homeScroll.refresh,200)
     this.$bus.$on('itemImgLoaded', () => {
       refresh()
     })
@@ -163,6 +151,13 @@ export default {
   padding-top: 44px;
   padding-bottom: 49px;
   height: 100vh;
+}
+#tab-control {
+  position: fixed;
+  top: 44px;
+  left: 0;
+  right: 0;
+  z-index: 666;
 }
 
 .home-scroll {
@@ -180,9 +175,4 @@ export default {
   z-index: 999;
 }
 
-.tab-control {
-  position: sticky;
-  z-index: 666;
-  top: 44px;
-}
 </style>
