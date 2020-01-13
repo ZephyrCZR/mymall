@@ -76,7 +76,7 @@ export default {
       getHomeGoods(type, page).then(res =>{
       this.goods[type].list.push(...res.data.list) //解构数组
       this.goods[type].page += 1
-      this.$refs.homeScroll.scroll.refresh()//暂时写这里,还得改的
+      // this.$refs.homeScroll.scroll.refresh()//暂时写这里,还得改的
       this.$refs.homeScroll.finishPullUp()
     })
     },
@@ -99,7 +99,20 @@ export default {
 
     loadMore() {
       this.getHomeGoods(this.currentType)
-    }
+    },
+
+    debounce(func, delay) {
+      let timer = null
+      return function (...args) {
+        if(timer) clearTimeout(timer)
+
+        timer = setTimeout(() => {
+          func.apply(this, args)
+        }, delay)
+      }
+    },
+
+    
   },
 
   computed: {
@@ -126,10 +139,21 @@ export default {
   created() {
     // 1.请求多个数据
     this.getHomeMultidata()
+
     // 2.请求商品数据
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
+
+    
+  },
+
+  mounted() {
+    // 刷新可滚动页面长度
+    const refresh = this.debounce(this.$refs.homeScroll.refresh,300)
+    this.$bus.$on('itemImgLoaded', () => {
+      refresh()
+    })
   }
 }
 </script>
