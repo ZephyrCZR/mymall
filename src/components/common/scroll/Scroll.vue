@@ -35,6 +35,9 @@
       },
       refresh() {
         this.scroll && this.scroll.refresh()
+      },
+      getScrollY() {
+        return this.scroll ? this.scroll.y : 0
       }
     },
     mounted() {
@@ -48,7 +51,6 @@
       // 2. 监听滚动位置
       if (this.probeType === 2 || this.probeType === 3) {
         this.scroll.on('scroll', (position) => {
-          // console.log(position)
           this.$emit('scroll', position)
         })
       }

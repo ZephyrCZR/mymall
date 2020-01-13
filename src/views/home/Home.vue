@@ -1,19 +1,19 @@
 <template>
-  
  <div id="home">
     <nav-bar class="home-nav"><template #center><div>购物街</div></template></nav-bar>
-     <tab-control id="tab-control" ref="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick" v-show="showTabControl"></tab-control>
+     <tab-control id="tab-control" ref="tabControlTop" :titles="['流行','新款','精选']" @tabClick="tabClick" v-show="showTabControl"></tab-control>
       <scroll class="home-scroll" 
               ref="homeScroll" 
               :probe-type="3" 
               :pull-up-load="true"
               @scroll="onScroll"
               @pullingUp="loadMore"> 
-        <home-swiper :banners="banners"></home-swiper>
+        <home-swiper :banners="banners" @swiperLoaded="swiperLoaded"></home-swiper>
         <home-recommend-view :recommends="recommends"></home-recommend-view>
         <feature-view ></feature-view>
         <tab-control ref="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick"></tab-control>
         <goods-list :goods="showGoods"></goods-list>
+        <loading></loading>
       </scroll>
       <back-top @click.native="backTopClick" v-show="showBackTopBtn"></back-top>
   </div>
@@ -30,6 +30,7 @@ import TabControl from 'components/content/tabControl/TabControl'
 import GoodsList from 'components/content/goods/GoodsList'
 import Scroll from 'components/common/scroll/Scroll'
 import BackTop from 'components/content/backTop/BackTop'
+import Loading from 'components/common/loading/Loading'
 
 import { getHomeMultidata, getHomeGoods } from "network/home"
 import { debounce } from "common/utils"
@@ -45,7 +46,8 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop
+    BackTop,
+    Loading
   },
   data() {
     return {
@@ -60,7 +62,8 @@ export default {
       BScroll: null,
       showBackTopBtn: false,
       showTabControl: false,
-      offsetTop: 0
+      offsetTop: 0,
+      lastPositionY: 0
     }
   },
 
@@ -82,7 +85,10 @@ export default {
     },
 
     tabClick(index) {
+      // 确保两个tabControl与home的index保持一致
       this.index = index
+      this.$refs.tabControl.currentIndex = index
+      this.$refs.tabControlTop.currentIndex = index
     },
 
     backTopClick() {
@@ -94,12 +100,16 @@ export default {
       this.showBackTopBtn = -position.y > 500
 
       // 2. 判断是否显示tabControl按钮
-      this.offsetTop = this.$refs.tabControl.$el.offsetTop
       this.showTabControl = -position.y > this.offsetTop
     },
 
     loadMore() {
       this.getHomeGoods(this.currentType)
+    },
+
+    swiperLoaded() {
+      // 获取tabControl相对位置，44为navbar高度
+      this.offsetTop = this.$refs.tabControl.$el.offsetTop - 44
     }
   },
 
@@ -132,8 +142,6 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
-
-    
   },
 
   mounted() {
@@ -142,6 +150,17 @@ export default {
     this.$bus.$on('itemImgLoaded', () => {
       refresh()
     })
+  },
+
+  //进入页面的时候
+  activated() {
+    this.$refs.homeScroll.scrollTo(0,this.lastPositionY,0)
+    this.$refs.homeScroll.refresh()
+  },
+
+  //离开页面的时候
+  deactivated() {
+    this.lastPositionY = this.$refs.homeScroll.getScrollY()
   }
 }
 </script>
@@ -152,9 +171,9 @@ export default {
   padding-bottom: 49px;
   height: 100vh;
 }
+
 #tab-control {
   position: fixed;
-  top: 44px;
   left: 0;
   right: 0;
   z-index: 666;
