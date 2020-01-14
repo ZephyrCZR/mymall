@@ -38,7 +38,10 @@
 <style scoped>
   .goods-info {
     padding: 16px 8px 18px;
+    background: #ffffff;
+    height: 200px;
     border-bottom: 4px solid #eee;
+    position: relative;
   }
 
   .goods-title {

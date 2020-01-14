@@ -123,7 +123,7 @@ export default {
     flex: 1;
     display: inline-block;
     text-align: center;
-    padding-right: 15px;
+    padding:0 15px 0 0;
     border-right: 1px solid #dddddd;
   } 
 
@@ -155,9 +155,6 @@ export default {
   color: white;
   }
 
-  .in-to {
-
-  }
   .in-to-btn {
     display: block;
     margin: auto;

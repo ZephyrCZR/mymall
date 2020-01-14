@@ -3,7 +3,7 @@
     <detail-nav-bar class="detail-nav"></detail-nav-bar>
     <scroll class="detail-scroll"
             ref="detailScroll">
-      <detail-swiper :topImgs="topImages" ></detail-swiper>
+      <detail-swiper :topImgs="topImages" @swiperLoaded="swiperLoaded"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
       <div class="empty"></div>
@@ -38,6 +38,13 @@ export default {
       topImages: [],
       goods: {},
       shop: {}
+    }
+  },
+
+  methods: {
+    swiperLoaded() {
+      console.log('hahaha');
+      this.$refs.detailScroll.refresh()
     }
   },
 
