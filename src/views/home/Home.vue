@@ -1,7 +1,7 @@
 <template>
  <div id="home">
     <nav-bar class="home-nav"><template #center><div>购物街</div></template></nav-bar>
-     <tab-control id="tab-control" ref="tabControlTop" :titles="['流行','新款','精选']" @tabClick="tabClick" v-show="showTabControl"></tab-control>
+      <tab-control id="tab-control" ref="tabControlTop" :titles="['流行','新款','精选']" @tabClick="tabClick" v-show="showTabControl"></tab-control>
       <scroll class="home-scroll" 
               ref="homeScroll" 
               :probe-type="3" 
@@ -59,7 +59,7 @@ export default {
         'sell': {page: 0, list: []}
       },
       index: 0,
-      BScroll: null,
+      // BScroll: null,
       showBackTopBtn: false,
       showTabControl: false,
       offsetTop: 0,

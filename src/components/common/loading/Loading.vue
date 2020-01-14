@@ -1,91 +1,122 @@
 <template>
   <div class="loading">
     <div class="circlebox">
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
     </div>
     <div class="circlebox">
-            <p></p>
-            <p></p>
-            <p></p>
-            <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
     </div>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'Loading',
-}
+  export default {
+    name: 'Loading',
+  }
+
 </script>
 
 <style scoped>
-  *{
-      margin: 0;
-      padding: 0;
+  * {
+    margin: 0;
+    padding: 0;
   }
-  .loading{
+
+  .loading {
     margin-top: 10px;
     display: flex;
     justify-content: center;
     position: relative;
   }
-  .circlebox{
-      width: 40px;
-      height: 40px;
-      /* border: 1 solid red; */
-      /* margin: 100px; */
-      position: absolute;
+
+  .circlebox {
+    width: 40px;
+    height: 40px;
+    /* border: 1 solid red; */
+    /* margin: 100px; */
+    position: absolute;
   }
-  .circlebox p{
-      width: 12px;
-      height: 12px;
-      background-color: #aaaaaa;
-      border-radius: 50%;
-      /* 添加圆角边框 100%与50%一样效果但是最好还是用50%吧 */
-      position: absolute;
-      animation: move 1.5s infinite linear;
+
+  .circlebox p {
+    width: 12px;
+    height: 12px;
+    background-color: #aaaaaa;
+    border-radius: 50%;
+    position: absolute;
+    animation: move 1.5s infinite linear;
   }
-  .circlebox p:nth-of-type(1){
-      left: 0;
-      top: 0;
+
+  .circlebox p:nth-of-type(1) {
+    left: 0;
+    top: 0;
   }
-  .circlebox p:nth-of-type(2){
-      right: 0;
-      top: 0;
+
+  .circlebox p:nth-of-type(2) {
+    right: 0;
+    top: 0;
   }
-  .circlebox p:nth-of-type(3){
-      right: 0;
-      bottom: 0;
+
+  .circlebox p:nth-of-type(3) {
+    right: 0;
+    bottom: 0;
   }
-  .circlebox p:nth-of-type(4){
-      left: 0;
-      bottom: 0;
+
+  .circlebox p:nth-of-type(4) {
+    left: 0;
+    bottom: 0;
   }
-  .circlebox:nth-of-type(2){
-      transform: rotate(45deg);
+
+  .circlebox:nth-of-type(2) {
+    transform: rotate(45deg);
   }
+
   @keyframes move {
-      0%{transform: scale(0);}
-      50%{transform: scale(1);}
-      100%{transform: scale(0);}
-      
+    0% {
+      transform: scale(0);
+    }
+
+    50% {
+      transform: scale(1);
+    }
+
+    100% {
+      transform: scale(0);
+    }
+
   }
-  .circlebox:nth-of-type(1) p:nth-of-type(1){
-      animation-delay: -0.1s;
-  }.circlebox:nth-of-type(2) p:nth-of-type(1){
-      animation-delay: -0.3s;
-  }.circlebox:nth-of-type(1) p:nth-of-type(2){
-      animation-delay: -0.5s;
-  }.circlebox:nth-of-type(2) p:nth-of-type(2){
-      animation-delay: -0.7s;
-  }.circlebox:nth-of-type(1) p:nth-of-type(3){
-      animation-delay: -0.9s;
-  }.circlebox:nth-of-type(2) p:nth-of-type(3){
-      animation-delay: -1.1s;
-  }.circlebox:nth-of-type(1) p:nth-of-type(4){
-      animation-delay: -1.3s;
+
+  .circlebox:nth-of-type(1) p:nth-of-type(1) {
+    animation-delay: -0.1s;
   }
+
+  .circlebox:nth-of-type(2) p:nth-of-type(1) {
+    animation-delay: -0.3s;
+  }
+
+  .circlebox:nth-of-type(1) p:nth-of-type(2) {
+    animation-delay: -0.5s;
+  }
+
+  .circlebox:nth-of-type(2) p:nth-of-type(2) {
+    animation-delay: -0.7s;
+  }
+
+  .circlebox:nth-of-type(1) p:nth-of-type(3) {
+    animation-delay: -0.9s;
+  }
+
+  .circlebox:nth-of-type(2) p:nth-of-type(3) {
+    animation-delay: -1.1s;
+  }
+
+  .circlebox:nth-of-type(1) p:nth-of-type(4) {
+    animation-delay: -1.3s;
+  }
+
 </style>
