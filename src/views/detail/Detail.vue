@@ -1,10 +1,11 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav" 
-                    ref="detailNav"/>
-    <scroll class="detail-scroll" ref="scroll"
+                    ref="detailNav"
+                    @navBarClick="navBarClick" />
+    <scroll class="detail-scroll" 
+            ref="scroll"
             :probe-type="3" 
-            @navBarClick="navBarClick" 
             @scroll="onScroll">
       <detail-swiper :topImgs="topImages" @swiperLoaded.once="swiperLoaded"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
@@ -87,15 +88,13 @@
         this.anchors.push(this.$refs.params.$el.offsetTop)
         this.anchors.push(this.$refs.comment.$el.offsetTop)
         this.anchors.push(this.$refs.recommend.$el.offsetTop)
-        console.log(this.anchors);
-        console.log(this.$refs.params);
       },
       navBarClick(index) {
         this.resetAnchors()
         this.$refs.scroll.scrollTo(0, -this.anchors[index], 100)
       },
       onScroll(position) {
-        if (-position.y < this.anchors[1]) {
+        if (this.anchors.length === 0 || -position.y < this.anchors[1]) {
           this.$refs.detailNav.currentIndex = 0
         } else if (-position.y < this.anchors[2]) {
           this.$refs.detailNav.currentIndex = 1
@@ -135,9 +134,11 @@
           this.commentInfo = info.rate.list[0]
         }
 
-        this.$nextTick(() => {
-          this.resetAnchors()
-        })
+        // this.$nextTick(() => {
+        //   this.resetAnchors()
+        //   console.log('计时器');
+        // })
+        //这个做法不好用
 
       }).catch((err) => {
         console.log(err)
@@ -149,6 +150,13 @@
       }).catch((err) => {
         console.log(err);
       })
+    },
+    mounted() {
+      const id = setTimeout(() => {
+        this.resetAnchors()
+        clearTimeout(id)
+        console.log('计时器');
+      }, 2000);
     }
   }
 
