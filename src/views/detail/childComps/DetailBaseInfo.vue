@@ -37,11 +37,11 @@
 
 <style scoped>
   .goods-info {
-    padding: 16px 8px 18px;
+    padding: 16px 10px 18px;
     background: #ffffff;
-    height: 200px;
     border-bottom: 4px solid #eee;
     position: relative;
+    text-align: left;
   }
 
   .goods-title {
@@ -111,7 +111,7 @@
   }
 
   .goods-services-item {
-    
+
     font-size: 13px;
   }
 

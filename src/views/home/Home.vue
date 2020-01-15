@@ -3,7 +3,7 @@
     <nav-bar class="home-nav"><template #center><div>购物街</div></template></nav-bar>
       <tab-control id="tab-control" ref="tabControlTop" :titles="['流行','新款','精选']" @tabClick="tabClick" v-show="showTabControl"></tab-control>
       <scroll class="home-scroll" 
-              ref="homeScroll" 
+              ref="scroll" 
               :probe-type="3" 
               :pull-up-load="true"
               @scroll="onScroll"
@@ -34,6 +34,7 @@ import Loading from 'components/common/loading/Loading'
 
 import { getHomeMultidata, getHomeGoods } from "network/home"
 import { debounce } from "common/utils"
+import { itemListenerMixin } from "common/mixin";
 
 export default {
   name: 'Home',
@@ -49,6 +50,7 @@ export default {
     BackTop,
     Loading
   },
+  mixins: [itemListenerMixin],
   data() {
     return {
       banners: [],
@@ -59,7 +61,6 @@ export default {
         'sell': {page: 0, list: []}
       },
       index: 0,
-      // BScroll: null,
       showBackTopBtn: false,
       showTabControl: false,
       offsetTop: 0,
@@ -80,7 +81,7 @@ export default {
       getHomeGoods(type, page).then(res =>{
       this.goods[type].list.push(...res.data.list) //解构数组
       this.goods[type].page += 1
-      this.$refs.homeScroll.finishPullUp()
+      this.$refs.scroll.finishPullUp()
     })
     },
 
@@ -92,7 +93,7 @@ export default {
     },
 
     backTopClick() {
-      this.$refs.homeScroll.scrollTo(0,0,500)
+      this.$refs.scroll.scrollTo(0,0,500)
     },
 
     onScroll(position) {
@@ -145,22 +146,19 @@ export default {
   },
 
   mounted() {
-    // 刷新可滚动页面长度
-    const refresh = debounce(this.$refs.homeScroll.refresh,200)
-    this.$bus.$on('itemImgLoaded', () => {
-      refresh()
-    })
+   
   },
 
   //进入页面的时候
   activated() {
-    this.$refs.homeScroll.scrollTo(0,this.lastPositionY,0)
-    this.$refs.homeScroll.refresh()
+    this.$refs.scroll.scrollTo(0,this.lastPositionY,0)
+    this.$refs.scroll.refresh()
   },
 
   //离开页面的时候
   deactivated() {
-    this.lastPositionY = this.$refs.homeScroll.getScrollY()
+    this.lastPositionY = this.$refs.scroll.getScrollY()
+    this.$bus.$off('itemImgLoaded',this.itemImgListener)
   }
 }
 </script>

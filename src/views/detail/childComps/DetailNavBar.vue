@@ -1,6 +1,10 @@
 <template>
   <nav-bar class="home-nav">
-    <template #left> <div @click="backClick"><img src="~assets/img/common/back.svg" alt="返回" id="backBtn"></div></template>
+    <template #left> 
+      <div @click="backClick">
+        <img src="~assets/img/common/back.svg" alt="返回" id="backBtn">
+      </div>
+    </template>
     <template #center>
       <div class="title">
         <span 
@@ -31,6 +35,7 @@
     methods: {
       itemClick(index) {
         this.currentIndex = index
+        this.$emit('navBarClick',index)
       },
       backClick() {
         this.$router.back()

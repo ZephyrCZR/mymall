@@ -29,7 +29,6 @@
     methods: {
       scrollTo(x, y, time = 300) {
         this.scroll && this.scroll.scrollTo && this.scroll.scrollTo(x, y, time);
-        console.log("test scroll");
       },
       finishPullUp() {
         this.scroll && this.scroll.finishPullUp()

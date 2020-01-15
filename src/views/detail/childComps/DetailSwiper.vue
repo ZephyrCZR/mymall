@@ -1,7 +1,7 @@
 <template>
   <swiper class="detail-swiper" v-if="topImgs.length">
     <swiper-item class="swiper-item" v-for="(item, index) in topImgs" :key="index">
-      <img class="top-img" :src="item" alt="图片" @load.once="imgLoaded">
+      <img class="top-img" :src="item" alt="图片" @load="imgLoaded">
     </swiper-item>
   </swiper>
 </template>

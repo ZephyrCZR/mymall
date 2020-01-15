@@ -70,7 +70,8 @@ export default {
 
 <style scoped>
   #shop-info {
-    padding: 20px 8px 0;
+    padding: 20px 10px 20px;
+    border-bottom: 4px solid #eee;
   }
 
   .seller-info {
