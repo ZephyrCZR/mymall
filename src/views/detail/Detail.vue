@@ -16,6 +16,7 @@
       <goods-list :goods="recommends" ref="recommend"></goods-list>
     </scroll>
     <detail-tab-bar></detail-tab-bar>
+    <back-top @click.native="backTopClick" v-show="showBackTopBtn"></back-top>
   </div>
 </template>
 
@@ -31,6 +32,7 @@
 
   import Scroll from 'components/common/scroll/Scroll'
   import GoodsList from 'components/content/goods/GoodsList'
+  import BackTop from 'components/content/backTop/BackTop'
 
   import {
     getDetail,
@@ -55,8 +57,10 @@
       DetailParamInfo,
       DetailCommentInfo,
       DetailTabBar,
+
       Scroll,
-      GoodsList
+      GoodsList,
+      BackTop
     },
 
     mixins: [itemListenerMixin],
@@ -71,7 +75,9 @@
         paramsInfo: {},
         commentInfo: {},
         recommends: [],
-        anchors: []
+        anchors: [],
+        clearId:null,
+        showBackTopBtn: false
       }
     },
 
@@ -83,11 +89,13 @@
         this.$refs.scroll.refresh()
       },
       resetAnchors() {
-        this.anchors = []
-        this.anchors.push(0)
-        this.anchors.push(this.$refs.params.$el.offsetTop)
-        this.anchors.push(this.$refs.comment.$el.offsetTop)
-        this.anchors.push(this.$refs.recommend.$el.offsetTop)
+        // if (this.$refs.params&&this.$refs.comment&&this.$refs.recommend) {
+          this.anchors = []
+          this.anchors.push(0)
+          this.anchors.push(this.$refs.params.$el.offsetTop)
+          this.anchors.push(this.$refs.comment.$el.offsetTop)
+          this.anchors.push(this.$refs.recommend.$el.offsetTop)
+        // }
       },
       navBarClick(index) {
         this.resetAnchors()
@@ -103,7 +111,16 @@
         } else {
           this.$refs.detailNav.currentIndex = 3
         }
+
+         // 1. 判断是否显示backTop按钮
+        this.showBackTopBtn = -position.y > 500
+
+        // 2. 判断是否显示tabControl按钮
+        this.showTabControl = -position.y > this.offsetTop
       },
+      backTopClick() {
+        this.$refs.scroll.scrollTo(0,0,500)
+      }
     },
     created() {
       //1.保存传入的iid
@@ -136,7 +153,6 @@
 
         // this.$nextTick(() => {
         //   this.resetAnchors()
-        //   console.log('计时器');
         // })
         //这个做法不好用
 
@@ -152,11 +168,16 @@
       })
     },
     mounted() {
-      const id = setTimeout(() => {
+      this.clearId = setTimeout(() => {
         this.resetAnchors()
-        clearTimeout(id)
+        clearTimeout(this.clearId)
         console.log('计时器');
-      }, 2000);
+      }, 3000);
+    },
+    beforeDestroy() {
+      if (this.clearId) {
+        clearTimeout(this.clearId)
+      }
     }
   }
 

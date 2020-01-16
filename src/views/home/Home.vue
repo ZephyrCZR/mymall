@@ -151,8 +151,8 @@ export default {
 
   //进入页面的时候
   activated() {
-    this.$refs.scroll.scrollTo(0,this.lastPositionY,0)
     this.$refs.scroll.refresh()
+    this.$refs.scroll.scrollTo(0,this.lastPositionY,0)
   },
 
   //离开页面的时候

@@ -15,7 +15,7 @@
         <span class="date">{{commentInfo.created | showDate}}</span>
         <span>{{commentInfo.style}}</span>
       </div>
-      <div class="info-imgs">
+      <div class="info-imgs" v-if="commentInfo.images">
         <img v-for="(item, index) in commentInfo.images" :key="index" :src="item">
       </div>
     </div>
@@ -101,10 +101,10 @@ export default {
 .info-other>span {
   padding-right: 8px;
 }
-.info-imgs {
+/* .info-imgs {
   height: 60px;
   overflow: hidden;
-}
+} */
 .info-imgs>img {
   width: 60px;
   height: 60px;

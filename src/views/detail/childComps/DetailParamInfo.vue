@@ -66,7 +66,7 @@ export default {
     width: 100%;
     display: flex;
     border-bottom: 1px solid #eeeeee;
-    height: 40px;
+    padding: 10px;
     align-items: center;
   }
 
