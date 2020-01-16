@@ -30,7 +30,7 @@ import TabBarItem from 'components/common/tabbar/TabBarItem'
 
 export default {
   name:'MainTabBar',
-  components: {//第2次写错
+  components: {
     TabBar,
     TabBarItem
   }

@@ -7,15 +7,16 @@
             ref="scroll"
             :probe-type="3" 
             @scroll="onScroll">
+      <div>{{$store.state.cartList}}</div>
       <detail-swiper :topImgs="topImages" @swiperLoaded.once="swiperLoaded"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
       <detail-goods-info :detail="detail" @imgLoaded="imgLoaded" class="detail-goods-info"></detail-goods-info>
       <detail-param-info :paramsInfo="paramsInfo" ref="params"></detail-param-info>
       <detail-comment-info :commentInfo="commentInfo" ref="comment"></detail-comment-info>
-      <goods-list :goods="recommends" ref="recommend"></goods-list>
+      <goods-list :goods="recommends" class="recommend" ref="recommend"></goods-list>
     </scroll>
-    <detail-tab-bar></detail-tab-bar>
+    <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
     <back-top @click.native="backTopClick" v-show="showBackTopBtn"></back-top>
   </div>
 </template>
@@ -28,11 +29,10 @@
   import DetailGoodsInfo from './childComps/DetailGoodsInfo'
   import DetailParamInfo from './childComps/DetailParamInfo'
   import DetailCommentInfo from './childComps/DetailCommentInfo'
-  import DetailTabBar from './childComps/DetailTabBar';
+  import DetailBottomBar from './childComps/DetailBottomBar';
 
   import Scroll from 'components/common/scroll/Scroll'
   import GoodsList from 'components/content/goods/GoodsList'
-  import BackTop from 'components/content/backTop/BackTop'
 
   import {
     getDetail,
@@ -41,9 +41,11 @@
     GoodsParam,
     getRecommend
   } from "network/detail"
+
   import {
-    itemListenerMixin
-  } from "common/mixin";
+    itemListenerMixin,
+    backTopButton
+  } from "common/mixin"
 
   export default {
     name: 'Detail',
@@ -56,14 +58,14 @@
       DetailGoodsInfo,
       DetailParamInfo,
       DetailCommentInfo,
-      DetailTabBar,
+      DetailBottomBar,
 
       Scroll,
       GoodsList,
-      BackTop
+      
     },
 
-    mixins: [itemListenerMixin],
+    mixins: [itemListenerMixin, backTopButton],
 
     data() {
       return {
@@ -77,7 +79,7 @@
         recommends: [],
         anchors: [],
         clearId:null,
-        showBackTopBtn: false
+        
       }
     },
 
@@ -89,37 +91,44 @@
         this.$refs.scroll.refresh()
       },
       resetAnchors() {
-        // if (this.$refs.params&&this.$refs.comment&&this.$refs.recommend) {
+        if (this.$refs.params&&this.$refs.comment&&this.$refs.recommend) {
           this.anchors = []
           this.anchors.push(0)
           this.anchors.push(this.$refs.params.$el.offsetTop)
           this.anchors.push(this.$refs.comment.$el.offsetTop)
           this.anchors.push(this.$refs.recommend.$el.offsetTop)
-        // }
+        }
       },
       navBarClick(index) {
         this.resetAnchors()
         this.$refs.scroll.scrollTo(0, -this.anchors[index], 100)
       },
       onScroll(position) {
-        if (this.anchors.length === 0 || -position.y < this.anchors[1]) {
+        const topY=-position.y
+        if (this.anchors.length === 0 || topY < this.anchors[1]) {
           this.$refs.detailNav.currentIndex = 0
-        } else if (-position.y < this.anchors[2]) {
+        } else if (topY < this.anchors[2]) {
           this.$refs.detailNav.currentIndex = 1
-        } else if (-position.y < this.anchors[3]) {
+        } else if (topY < this.anchors[3]) {
           this.$refs.detailNav.currentIndex = 2
         } else {
           this.$refs.detailNav.currentIndex = 3
         }
 
-         // 1. 判断是否显示backTop按钮
-        this.showBackTopBtn = -position.y > 500
-
-        // 2. 判断是否显示tabControl按钮
-        this.showTabControl = -position.y > this.offsetTop
+        //监听是否显示backTop按钮
+        this.showBackTopBtnListener(topY)
       },
-      backTopClick() {
-        this.$refs.scroll.scrollTo(0,0,500)
+      addToCart() {
+        //1.获取购物车需要展示的信息
+        const product = {}
+        product.title = this.goods.title
+        product.desc = this.goods.desc
+        product.price = this.goods.realPrice
+        product.image = this.topImages[0]
+        product.iid = this.iid
+
+        // 2.将商品添加到购物车
+        this.$store.dispatch('addCart', product)
       }
     },
     created() {
@@ -168,10 +177,10 @@
       })
     },
     mounted() {
+      //定时获取锚点位置,下次改成监听图片加载
       this.clearId = setTimeout(() => {
         this.resetAnchors()
         clearTimeout(this.clearId)
-        console.log('计时器');
       }, 3000);
     },
     beforeDestroy() {
@@ -203,7 +212,8 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 999;
   }
-
+  .recommend {
+    padding-bottom: 49px;
+  }
 </style>

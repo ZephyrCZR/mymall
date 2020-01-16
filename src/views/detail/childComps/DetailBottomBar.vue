@@ -1,5 +1,5 @@
 <template>
-  <div id="detail-tab-bar">
+  <div id="detail-bottom-bar">
     <div class="left">
       <div>
         <div class="chat"></div>
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="right">
-      <div class="add">加入购物车</div>
+      <div class="add" @click="addToCart">加入购物车</div>
       <div class="buy">立即购买</div>
     </div>
   </div>
@@ -23,19 +23,25 @@
 
 <script>
 export default {
-  name: 'DetailTabBar',
+  name: 'DetailBottomBar',
+  methods: {
+    addToCart() {
+      this.$emit('addToCart')
+      console.log('添加到购物车');
+    }
+  }
 }
 </script>
 
 <style scoped>
-  #detail-tab-bar {
+  #detail-bottom-bar {
     display: flex;
     height: 49px;
     width: 100%;
     position: fixed;
     bottom: 0;
     background-color: #ffffff;
-    z-index: 2999;
+    /* z-index: 2999; */
     font-size: 12px;
   }
   .left, .right {

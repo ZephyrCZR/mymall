@@ -2,7 +2,7 @@
   <div v-if="Object.keys(goods).length !== 0" class="goods-info">
     <span class="goods-title">{{goods.title}}</span>
     <div class="goods-price">
-      <span class="real-price">{{goods.realPrice}}</span>
+      <span class="real-price">{{goods.newPrice}}</span>
       <span class="old-price">{{goods.oldPrice}}</span>
       <span v-if="goods.discount" class="discount">{{goods.discount}}</span>
     </div>

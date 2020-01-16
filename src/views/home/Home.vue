@@ -29,12 +29,11 @@ import NavBar from 'components/common/navbar/NavBar'
 import TabControl from 'components/content/tabControl/TabControl'
 import GoodsList from 'components/content/goods/GoodsList'
 import Scroll from 'components/common/scroll/Scroll'
-import BackTop from 'components/content/backTop/BackTop'
 import Loading from 'components/common/loading/Loading'
 
 import { getHomeMultidata, getHomeGoods } from "network/home"
 import { debounce } from "common/utils"
-import { itemListenerMixin } from "common/mixin";
+import { itemListenerMixin, backTopButton } from "common/mixin";
 
 export default {
   name: 'Home',
@@ -47,10 +46,11 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop,
     Loading
   },
-  mixins: [itemListenerMixin],
+
+  mixins: [itemListenerMixin, backTopButton],
+
   data() {
     return {
       banners: [],
@@ -61,7 +61,6 @@ export default {
         'sell': {page: 0, list: []}
       },
       index: 0,
-      showBackTopBtn: false,
       showTabControl: false,
       offsetTop: 0,
       lastPositionY: 0
@@ -92,16 +91,9 @@ export default {
       this.$refs.tabControlTop.currentIndex = index
     },
 
-    backTopClick() {
-      this.$refs.scroll.scrollTo(0,0,500)
-    },
-
     onScroll(position) {
-      // 1. 判断是否显示backTop按钮
-      this.showBackTopBtn = -position.y > 500
-
-      // 2. 判断是否显示tabControl按钮
-      this.showTabControl = -position.y > this.offsetTop
+      const topY=-position.y
+      this.showBackTopBtnListener(topY)
     },
 
     loadMore() {
@@ -174,7 +166,7 @@ export default {
   position: fixed;
   left: 0;
   right: 0;
-  z-index: 666;
+  z-index: 999;
 }
 
 .home-scroll {
@@ -189,7 +181,6 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 999;
 }
 
 </style>

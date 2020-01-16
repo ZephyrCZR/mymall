@@ -19,7 +19,8 @@ export default {
     width: 100%;
     background-color: #f6f6f6;
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
-    padding-top: 8px;
+    padding-top: 6px;
+    height: 49px;
     z-index: 999;
   }
   

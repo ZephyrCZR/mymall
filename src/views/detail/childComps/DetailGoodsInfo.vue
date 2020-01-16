@@ -4,7 +4,6 @@
 
     <div class="detail-img">
       <div v-for="item in detail.detailImage" :key="item.key">
-        <!-- <div class="info-key">{{item.key}}</div> -->
         <div class="info-list" v-for="(item, index) in item.list" :key="index">
           <img :src="item" alt="图片" @load="imgLoaded">
         </div>
