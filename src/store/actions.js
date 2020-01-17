@@ -8,31 +8,28 @@ import {
 export default {
   //添加到购物车
   addCart(context, payload) {
-    //1.查找数组中是否存在此商品
-    let oldProduct = context.state.cartList.find(item => item.iid === payload.iid)
+    return new Promise((resolve, reject) => {
+      //1.查找数组中是否存在此商品
+      let oldProduct = context.state.cartList.find(item => item.iid === payload.iid)
 
-    //2.判断oldProduct是否取到值
-    if (oldProduct) {
-      context.commit(ADD_COUNTER, oldProduct)
-    } else {
-      context.commit(ADD_NEW_PRODUCT, payload)
-    }
+      //2.判断oldProduct是否取到值
+      if (oldProduct) {
+        context.commit(ADD_COUNTER, oldProduct)
+        resolve('当前商品数量+1')
+      } else {
+        context.commit(ADD_NEW_PRODUCT, payload)
+        resolve('添加了新的商品')
+      }
+    })
   },
-
+  // 购物车选中商品
   handleCart(context, payload) {
     context.commit(CHANGE_STATE, payload)
   },
-
+  // 购物车全选商品
   handleCartAll(context, payload) {
     context.commit(CHANGE_ALL_STATE, payload)
   }
+  
 
-
-  // handleCheckList(context, payload) {
-  //   if (payload.flag) {
-  //     context.commit(ADD_CHECK_LIST, payload)
-  //   }else{
-  //     context.commit(REMOVE_CHECK_LIST, payload)
-  //   }
-  // }
 }

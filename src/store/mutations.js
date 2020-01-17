@@ -27,9 +27,11 @@ export default {
     state.cartList.forEach((item) => {
       item.checked = payload
     })
-  },
+  }
 
-  
+
+
+
 
   // [ADD_CHECK_LIST](state, payload) {
   //   // payload.

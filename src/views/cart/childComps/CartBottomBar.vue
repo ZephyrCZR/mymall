@@ -10,9 +10,7 @@
 <script>
   import TickBtn from 'components/content/tickbtn/TickBtn'
 
-  import {
-    mapGetters
-  } from "vuex"
+  import { mapGetters } from "vuex"
 
   export default {
     name: 'CartBottomBar',
@@ -34,7 +32,7 @@
         //     item.checked = true
         //   })
         // }
-
+        console.log(this.isCheckAll);
         this.$store.dispatch('handleCartAll', !this.isCheckAll)
       }
     },

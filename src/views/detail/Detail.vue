@@ -32,6 +32,7 @@
 
   import Scroll from 'components/common/scroll/Scroll'
   import GoodsList from 'components/content/goods/GoodsList'
+  
 
   import {
     getDetail,
@@ -45,6 +46,8 @@
     itemListenerMixin,
     backTopButton
   } from "common/mixin"
+
+  import { mapActions } from "vuex"
 
   export default {
     name: 'Detail',
@@ -61,7 +64,6 @@
 
       Scroll,
       GoodsList,
-      
     },
 
     mixins: [itemListenerMixin, backTopButton],
@@ -83,6 +85,8 @@
     },
 
     methods: {
+      ...mapActions(['addCart']),
+
       swiperLoaded() {
         this.$refs.scroll.refresh()
       },
@@ -128,7 +132,16 @@
         product.checked = this.checked
 
         // 2.将商品添加到购物车
-        this.$store.dispatch('addCart', product)
+         this.addCart(product).then(res => {
+          // console.log(res);
+          // console.log(this.$toast);
+          this.$toast.show(res, 2000)
+        })
+        // this.$store.dispatch('addCart', product).then(res => {
+        //   console.log(res);
+        // })
+        
+        
       }
     },
     created() {
@@ -175,6 +188,9 @@
       }).catch((err) => {
         console.log(err);
       })
+
+      
+
     },
     mounted() {
       //定时获取锚点位置,下次改成监听图片加载

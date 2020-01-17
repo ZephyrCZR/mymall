@@ -12,7 +12,6 @@ export default {
   //计算总价格
   totalPrice(state) {
     let total = state.cartList.reduce((prev, item) => {
-      // console.log(prev);
       let price = 0
       if (item.checked) {
         price = parseInt(item.price * 1000)
@@ -34,28 +33,9 @@ export default {
 
   //判断购物车列表是否全选
   isCheckAll(state) {
-    // let isAll = false
-    // if (state.cartList.length) {
-    //   isAll = state.cartList.every((item) => {
-    //     return item.checked
-    //   })
-    // }
-    // return isAll
-    return !state.cartList.find(item => !item.checked)
+    if (state.cartList.length !== 0) {
+      return !state.cartList.find(item => !item.checked)
+    }
+
   }
-
-
-
-  // totalPrice(state) {
-  //   let total = state.checkList.reduce((prev, item) => {
-  //     // console.log(prev);
-  //     let price = parseInt(item.price*1000) 
-  //     price *= item.count
-  //     return price + prev
-  //   },0)
-  //   return (parseFloat(total)/1000).toFixed(2)
-  // },
-  // checkListCount(state) {
-  //   return state.checkList.length
-  // } 
 }
