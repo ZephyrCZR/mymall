@@ -1,7 +1,7 @@
 <template>
   <div id="product-item">
     <div class="tick">
-      <tick-btn @checkBoxClick="isChecked"></tick-btn>
+      <tick-btn ref="tickBtn" @click.native="checkBoxClick" :isChecked="itemInfo.checked"/>
     </div>
 
     <div class="product-img"><img :src="itemInfo.image" alt=""></div>
@@ -24,7 +24,7 @@ export default {
   components:{
     TickBtn
   },
-  
+
   props: {
     itemInfo: {
       type: Object,
@@ -35,12 +35,18 @@ export default {
   },
   
   methods: {
-    isChecked(isChe) {
-      const product = this.itemInfo
-      product.flag = isChe
-      this.$store.dispatch('handleCheckList', product)
+    //选择按钮的触发事件和状态
+    checkBoxClick() {
+      this.$store.dispatch('handleCart',this.itemInfo)
     }
-  }
+  },
+
+  // updated() {
+    //改变商品选中状态
+    // this.$refs.tickBtn.isChecked = this.itemInfo.checked
+  // }
+  
+
 }
 </script>
 

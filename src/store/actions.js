@@ -1,4 +1,9 @@
-import { ADD_COUNTER, ADD_NEW_PRODUCT, ADD_CHECK_LIST, REMOVE_CHECK_LIST } from "./mutation-types"
+import {
+  ADD_COUNTER,
+  ADD_NEW_PRODUCT,
+  CHANGE_STATE,
+  CHANGE_ALL_STATE
+} from "./mutation-types"
 
 export default {
   //添加到购物车
@@ -9,16 +14,25 @@ export default {
     //2.判断oldProduct是否取到值
     if (oldProduct) {
       context.commit(ADD_COUNTER, oldProduct)
-    }else{
+    } else {
       context.commit(ADD_NEW_PRODUCT, payload)
     }
   },
 
-  handleCheckList(context, payload) {
-    if (payload.flag) {
-      context.commit(ADD_CHECK_LIST, payload)
-    }else{
-      context.commit(REMOVE_CHECK_LIST, payload)
-    }
+  handleCart(context, payload) {
+    context.commit(CHANGE_STATE, payload)
+  },
+
+  handleCartAll(context, payload) {
+    context.commit(CHANGE_ALL_STATE, payload)
   }
+
+
+  // handleCheckList(context, payload) {
+  //   if (payload.flag) {
+  //     context.commit(ADD_CHECK_LIST, payload)
+  //   }else{
+  //     context.commit(REMOVE_CHECK_LIST, payload)
+  //   }
+  // }
 }

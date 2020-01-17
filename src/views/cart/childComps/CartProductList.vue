@@ -28,6 +28,6 @@ export default {
 
 <style scoped>
   #product-list {
-    padding-bottom: 49px;
+    padding-bottom: 85px;
   }
 </style>

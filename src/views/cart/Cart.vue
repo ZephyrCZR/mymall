@@ -2,7 +2,7 @@
 <div id="cart">
   <nav-bar class="nav-bar"><template #center><div>购物街({{cartLength}})</div></template></nav-bar>
   <scroll class="cart-scroll" ref="scroll">
-    <cart-product-list :cartList="cartList"></cart-product-list>
+    <cart-product-list :cartList="cartList"/>
   </scroll>
   <cart-bottom-bar></cart-bottom-bar>
 </div>
@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     //获取getter的计算属性
-    ...mapGetters(['cartLength','cartList']),
+    ...mapGetters(['cartLength','cartList','isCheckAll']),
     // ...mapGetters({
     //   length:'cartLength',
     //   list: 'cartList'
@@ -39,6 +39,7 @@ export default {
    //进入页面的时候
   activated() {
     this.$refs.scroll.refresh()
+    
   },
 
 }
@@ -48,6 +49,7 @@ export default {
   #cart {
     height: 100vh;
     padding-top: 44px;
+    /* height: calc(100% - 44px - 55px); */
   }
   .nav-bar {
     background-color: var(--color-tint);

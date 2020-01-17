@@ -7,7 +7,6 @@
             ref="scroll"
             :probe-type="3" 
             @scroll="onScroll">
-      <div>{{$store.state.cartList}}</div>
       <detail-swiper :topImgs="topImages" @swiperLoaded.once="swiperLoaded"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
@@ -126,6 +125,7 @@
         product.price = this.goods.realPrice
         product.image = this.topImages[0]
         product.iid = this.iid
+        product.checked = this.checked
 
         // 2.将商品添加到购物车
         this.$store.dispatch('addCart', product)

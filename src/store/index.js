@@ -12,7 +12,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     cartList: [],
-    checkList: []
+    // checkList: []
   },
   actions,
   mutations,
