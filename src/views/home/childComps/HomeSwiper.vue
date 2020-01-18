@@ -1,7 +1,7 @@
 <template>
   <swiper>
     <swiper-item v-for="item in banners" :key="item.title">
-      <a :href="item.link">
+      <a href="#">
         <img :src="item.image" alt="图片" @load.once="imgLoaded">
       </a>
     </swiper-item>

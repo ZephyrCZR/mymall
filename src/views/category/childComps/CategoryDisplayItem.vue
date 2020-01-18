@@ -8,6 +8,7 @@
 <script>
 export default {
   name: 'CategoryDisplayItem',
+
   props: {
     subInfo: {
       type: Object,
@@ -15,9 +16,7 @@ export default {
         return {}
       }
     }
-  },
-  
-
+  }
 }
 </script>
 

@@ -1,47 +1,100 @@
 <template>
-  <div id="category-display">
-    <scroll class="category-scroll" >
-      <div class="category-display">
-        <category-display-item class="display-item" v-for="(item, index) in SubCategory" :key="index" :subInfo='item'></category-display-item>
-      </div>
-    </scroll>
-  </div>
+  <scroll class="category-scroll" ref="scroll" :pull-up-load="true" @pullingUp="pullingUp">
+    <div class="category-display">
+      <category-display-item class="display-item" v-for="(item, index) in subCategory" :key="index" :subInfo='item' />
+    </div>
+    <tab-control ref="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick"></tab-control>
+    <goods-list class="goods-list" :goods="showGoods" @imgLoaded="toRefresh" />
+    <loading/>
+  </scroll>
 </template>
 
 <script>
   import CategoryDisplayItem from './CategoryDisplayItem'
 
   import Scroll from 'components/common/scroll/Scroll'
-  
+  import TabControl from 'components/content/tabControl/TabControl'
+  import GoodsList from 'components/content/goods/GoodsList'
+  import Loading from 'components/common/loading/Loading'
+
   export default {
     name: 'CategoryDisplay',
+
     components: {
+      CategoryDisplayItem,
+
       Scroll,
-      CategoryDisplayItem
+      TabControl,
+      GoodsList,
+      Loading
     },
+
+    data() {
+      return {
+        index: 0,
+        imgLoadedCounter: 0
+      }
+    },
+
     props: {
-      SubCategory: {
+      subCategory: {
         type: Array,
-        default() {
+        default () {
           return []
+        }
+      },
+      categoryDetail: {
+        type: Object,
+        default () {
+          return {}
         }
       }
     },
-   
-   
 
+    methods: {
+      tabClick(index) {
+        this.index = index
+        this.$emit('changeTab', this.currentType)
+      },
+      pullingUp() {
+        this.$emit('pullingUp')
+        // this.$refs.scroll.finishPullUp()
+        console.log("上拉");
+      },
+      toRefresh() {
+        if (++this.imgLoadedCounter === this.showGoods.length) {
+          this.$refs.scroll.finishPullUp()
+        }
+        this.$refs.scroll.refresh()
+      }
+    },
 
+    computed: {
+      // 标签当前类型
+      currentType() {
+        switch (this.index) {
+          case 0:
+            return 'pop'
+            break;
+          case 1:
+            return 'new'
+            break;
+          case 2:
+            return 'sell'
+            break;
+          default:
+            return 'pop'
+        }
+      },      
+      showGoods() {
+        return this.categoryDetail[this.currentType].list
+      }
+    }
   }
 
 </script>
 
 <style scoped>
-  #category-display {
-    height: 100%;
-    width: 100%;
-    /* background-color: aqua; */
-  }
-
   .category-scroll {
     width: 100%;
     height: 100%;
@@ -49,10 +102,9 @@
   }
 
   .category-display {
-    padding-bottom: 49px;
     width: 100%;
     display: flex;
-    flex-wrap:wrap;
+    flex-wrap: wrap;
     justify-content: space-around;
   }
 

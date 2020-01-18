@@ -23,6 +23,7 @@ export default {
  methods: {
    imgLoad() {
      this.$bus.$emit('itemImgLoaded')
+     this.$emit('itemImgLoaded')
    },
    itemClick() {
       this.$router.push('/detail/' + this.goodsItem.iid)
@@ -30,7 +31,7 @@ export default {
  },
  computed: {
    showImage() {
-     return this.goodsItem.image || this.goodsItem.show.img
+     return this.goodsItem.img || this.goodsItem.image || this.goodsItem.show.img
    }
  }
 }

@@ -137,10 +137,6 @@ export default {
     this.getHomeGoods('sell')
   },
 
-  mounted() {
-   
-  },
-
   //进入页面的时候
   activated() {
     this.$refs.scroll.refresh()

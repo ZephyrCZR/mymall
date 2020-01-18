@@ -5,8 +5,9 @@
           :class="{active: currentIndex === index}" 
           v-for="(item, index) in categoryList"
           :key="index"
-          @click="itemClick(index, item.maitKey)"
-          >{{item.title}}</div>
+          @click="itemClick(index, item.maitKey, item.miniWallkey)">
+            {{item.title}}
+          </div>
     </div>
   </div>
 </template>
@@ -28,9 +29,9 @@
       }
     },
     methods: {
-      itemClick(index, maitKey) {
+      itemClick(index, maitKey, miniWallkey) {
         this.currentIndex = index
-        this.$emit('itemClick', maitKey)
+        this.$emit('itemClick', maitKey, miniWallkey)
       }
     }
   }
@@ -59,12 +60,14 @@
     line-height: 36px;
     text-align: center;
     font-size: 14px;
+    position: relative;
   }
 
   .active {
     background-color: #ffffff;
     color: var(--color-high-text);
     border-left: 4px solid var(--color-tint);
+    border-right: 4px solid rgba(0, 0, 0, 0);
   }
 
 </style>
