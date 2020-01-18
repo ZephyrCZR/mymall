@@ -134,7 +134,7 @@
         // 2.将商品添加到购物车
          this.addCart(product).then(res => {
           // console.log(res);
-          // console.log(this.$toast);
+          console.log(this.$toast);
           this.$toast.show(res, 2000)
         })
         // this.$store.dispatch('addCart', product).then(res => {
@@ -150,7 +150,7 @@
 
       // 2.根据iid请求详情数据
       getDetail(this.iid).then((res) => {
-        // console.log(res);
+        console.log('详细信息:',res);
         const info = res.result
 
         // 1.获取轮播图数据
