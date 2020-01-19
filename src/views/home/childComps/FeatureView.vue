@@ -15,10 +15,12 @@ export default {
 <style>
   .feature {
     width: 100%;
+    /* margin-right: -2px; */
   }
 
   .feature img {
-    width: 100%;
+    width: calc(100% + 1px);
     display: block;
+    
   }
 </style>
