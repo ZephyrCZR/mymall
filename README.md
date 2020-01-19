@@ -1,4 +1,4 @@
-# zcmall
+# Vue 移动端购物商城
 
 ## 数据接口
 - API由 @coderwhy 提供
