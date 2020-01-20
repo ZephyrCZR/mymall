@@ -1,21 +1,21 @@
 <template>
  <div id="home">
     <nav-bar class="home-nav"><template #center><div>购物街</div></template></nav-bar>
-      <tab-control id="tab-control" ref="tabControlTop" :titles="['流行','新款','精选']" @tabClick="tabClick" v-show="showTabControl"></tab-control>
+      <tab-control id="tab-control" ref="tabControlTop" :titles="['流行','新款','精选']" @tabClick="tabClick" v-show="showTabControl"/>
       <scroll class="home-scroll" 
               ref="scroll" 
               :probe-type="3" 
               :pull-up-load="true"
               @scroll="onScroll"
               @pullingUp="loadMore"> 
-        <home-swiper :banners="banners" @swiperLoaded="swiperLoaded"></home-swiper>
-        <home-recommend-view :recommends="recommends"></home-recommend-view>
-        <feature-view ></feature-view>
-        <tab-control ref="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick"></tab-control>
-        <goods-list :goods="showGoods"></goods-list>
-        <loading></loading>
+        <home-swiper :banners="banners" @swiperLoaded="swiperLoaded"/>
+        <home-recommend-view :recommends="recommends"/>
+        <feature-view/>
+        <tab-control ref="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
+        <goods-list :goods="showGoods"/>
+        <loading/>
       </scroll>
-      <back-top @click.native="backTopClick" v-show="showBackTopBtn"></back-top>
+      <back-top @click.native="backTopClick" v-show="showBackTopBtn"/>
   </div>
  
 </template>
@@ -32,8 +32,7 @@ import Scroll from 'components/common/scroll/Scroll'
 import Loading from 'components/common/loading/Loading'
 
 import { getHomeMultidata, getHomeGoods } from "network/home"
-import { debounce } from "common/utils"
-import { itemListenerMixin, backTopButton } from "common/mixin";
+import { itemListenerMixin, backTopButton } from "common/mixin"
 
 export default {
   name: 'Home',
@@ -96,6 +95,12 @@ export default {
     onScroll(position) {
       const topY=-position.y
       this.showBackTopBtnListener(topY)
+      this.showTabControlListener(topY)
+    },
+
+    showTabControlListener(topY) {
+      // 2. 判断是否显示tabControl按钮
+      this.showTabControl = topY > this.offsetTop
     },
 
     loadMore() {
@@ -148,7 +153,7 @@ export default {
   //离开页面的时候
   deactivated() {
     this.lastPositionY = this.$refs.scroll.getScrollY()
-    this.$bus.$off('itemImgLoaded',this.itemImgListener)
+    this.$bus.$off('itemImgLoaded', this.itemImgListener)
   }
 }
 </script>

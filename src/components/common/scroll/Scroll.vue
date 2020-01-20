@@ -39,6 +39,7 @@
         this.scroll && this.scroll.finishPullUp()
       },
       refresh() {
+        console.log('刷新了');
         this.scroll && this.scroll.refresh()
       },
       getScrollY() {

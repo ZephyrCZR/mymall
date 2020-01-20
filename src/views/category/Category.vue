@@ -2,10 +2,10 @@
   <div id="category">
     <nav-bar class="category-nav"><template #center>商品分类</template></nav-bar>
     <category-list class="scroll-list" :categoryList="categoryList" @itemClick="refreshDisplay" />
-    <scroll class="category-scroll" ref="scroll" :pull-up-load="true" @pullingUp="getCategoryDetail">
-      <category-display :subCategory="subCategory" :categoryDetail="categoryDetail" @changeTab="changeTab">
-      </category-display>
+    <scroll class="category-scroll" ref="scroll" :pull-up-load="true" :probe-type="3" @scroll="onScroll" @pullingUp="getCategoryDetail">
+      <category-display :subCategory="subCategory" :categoryDetail="categoryDetail" @changeTab="changeTab"/>
     </scroll>
+    <back-top @click.native="backTopClick" v-show="showBackTopBtn"/>
   </div>
 </template>
 
@@ -15,6 +15,8 @@
 
   import NavBar from 'components/common/navbar/NavBar'
   import Scroll from 'components/common/scroll/Scroll'
+
+  import { itemListenerMixin, backTopButton } from "common/mixin";
 
   import {
     getCategory,
@@ -32,6 +34,8 @@
       NavBar,
       Scroll
     },
+
+    mixins: [itemListenerMixin, backTopButton],
 
     data() {
       return {
@@ -110,10 +114,10 @@
         this.currentType = type
       },
 
-      //刷新可滚动页面长度
-      toRefresh() {
-        this.$refs.scroll.refresh()
-      },
+      onScroll(position) {
+      const topY=-position.y
+      this.showBackTopBtnListener(topY)
+      }
     },
 
     created() {
@@ -121,20 +125,10 @@
       this.getCategory()
     },
 
-    mounted() {
-      //监听图片加载完成事件
-      this.$bus.$on('itemImgLoaded', this.toRefresh)
-    },
-
-    //进入页面的时候
-    activated() {
-      this.$refs.scroll.refresh()
-    },
-
     //退出页面的时候
     deactivated() {
       // 清除所有监听
-      this.$bus.$off()
+      this.$bus.$off('itemImgLoaded', this.itemImgListener)
     }
   }
 
