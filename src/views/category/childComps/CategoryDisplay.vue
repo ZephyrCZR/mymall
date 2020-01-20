@@ -4,7 +4,7 @@
       <category-display-item class="display-item" v-for="(item, index) in subCategory" :key="index" :subInfo='item' />
     </div>
     <tab-control ref="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick"></tab-control>
-    <goods-list class="goods-list" :goods="showGoods" @imgLoaded="toRefresh" />
+    <goods-list class="goods-list" :goods="showGoods"/>
     <loading/>
   </scroll>
 </template>
@@ -66,7 +66,7 @@
           this.$refs.scroll.finishPullUp()
         }
         this.$refs.scroll.refresh()
-      }
+      },      
     },
 
     computed: {
@@ -89,6 +89,10 @@
       showGoods() {
         return this.categoryDetail[this.currentType].list
       }
+    },
+
+    mounted() {
+      this.$bus.$on('itemImgLoaded', this.toRefresh)
     }
   }
 

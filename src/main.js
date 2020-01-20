@@ -9,6 +9,7 @@ import toast from 'components/common/toast'
 
 Vue.config.productionTip = false
 
+// 实例化一个事件总线
 Vue.prototype.$bus = new Vue()
 
 //安装 toast 插件
