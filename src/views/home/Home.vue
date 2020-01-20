@@ -80,6 +80,8 @@ export default {
       getHomeGoods(type, page).then(res =>{
       this.goods[type].list.push(...res.data.list) //解构数组
       this.goods[type].page += 1
+
+      //当成功获取数据后,可以再次上拉刷新
       this.$refs.scroll.finishPullUp()
     })
     },

@@ -1,18 +1,17 @@
 <template>
-  <scroll class="category-scroll" ref="scroll" :pull-up-load="true" @pullingUp="pullingUp">
+  <div class="category-scroll">
     <div class="category-display">
-      <category-display-item class="display-item" v-for="(item, index) in subCategory" :key="index" :subInfo='item' />
+      <category-display-item class="display-item" v-for="(item, index) in subCategory" :key="index" :subInfo='item'/>
     </div>
-    <tab-control ref="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick"></tab-control>
+    <tab-control ref="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
     <goods-list class="goods-list" :goods="showGoods"/>
     <loading/>
-  </scroll>
+  </div>
 </template>
 
 <script>
   import CategoryDisplayItem from './CategoryDisplayItem'
 
-  import Scroll from 'components/common/scroll/Scroll'
   import TabControl from 'components/content/tabControl/TabControl'
   import GoodsList from 'components/content/goods/GoodsList'
   import Loading from 'components/common/loading/Loading'
@@ -23,7 +22,6 @@
     components: {
       CategoryDisplayItem,
 
-      Scroll,
       TabControl,
       GoodsList,
       Loading
@@ -31,8 +29,7 @@
 
     data() {
       return {
-        index: 0,
-        imgLoadedCounter: 0
+        index: 0
       }
     },
 
@@ -55,18 +52,7 @@
       tabClick(index) {
         this.index = index
         this.$emit('changeTab', this.currentType)
-      },
-      pullingUp() {
-        this.$emit('pullingUp')
-        // this.$refs.scroll.finishPullUp()
-        console.log("上拉");
-      },
-      toRefresh() {
-        if (++this.imgLoadedCounter === this.showGoods.length) {
-          this.$refs.scroll.finishPullUp()
-        }
-        this.$refs.scroll.refresh()
-      },      
+      },     
     },
 
     computed: {
@@ -90,21 +76,11 @@
         return this.categoryDetail[this.currentType].list
       }
     },
-
-    mounted() {
-      this.$bus.$on('itemImgLoaded', this.toRefresh)
-    }
   }
 
 </script>
 
 <style scoped>
-  .category-scroll {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-
   .category-display {
     width: 100%;
     display: flex;

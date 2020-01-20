@@ -1,9 +1,11 @@
 <template>
   <div id="category">
     <nav-bar class="category-nav"><template #center>商品分类</template></nav-bar>
-    <category-list class="scroll-list" :categoryList="categoryList" @itemClick="refreshDisplay"/>
-    <category-display ref="display" class="scroll-display" :subCategory="subCategory" :categoryDetail="categoryDetail" @changeTab="changeTab" @pullingUp="getCategoryDetail">
-    </category-display>
+    <category-list class="scroll-list" :categoryList="categoryList" @itemClick="refreshDisplay" />
+    <scroll class="category-scroll" ref="scroll" :pull-up-load="true" @pullingUp="getCategoryDetail">
+      <category-display :subCategory="subCategory" :categoryDetail="categoryDetail" @changeTab="changeTab">
+      </category-display>
+    </scroll>
   </div>
 </template>
 
@@ -12,6 +14,7 @@
   import CategoryDisplay from './childComps/CategoryDisplay'
 
   import NavBar from 'components/common/navbar/NavBar'
+  import Scroll from 'components/common/scroll/Scroll'
 
   import {
     getCategory,
@@ -26,7 +29,8 @@
       CategoryList,
       CategoryDisplay,
 
-      NavBar
+      NavBar,
+      Scroll
     },
 
     data() {
@@ -57,7 +61,6 @@
       getCategory() {
         getCategory().then(res => {
           this.categoryList = res.data.category.list
-          console.log(res);
         }).then(res => {
           // 当拿到list数据后,直接获取第一页分类数据
           this.refreshDisplay(this.categoryList[0].maitKey, this.categoryList[0].miniWallkey)
@@ -67,23 +70,25 @@
       //获取子分类数据
       getSubCategory(key) {
         getSubCategory(key).then(res => {
-          console.log(res);
           this.subCategory = res.data.list
         })
       },
 
       //获取分类商品信息
       getCategoryDetail(key = this.currentGoodsKey, type = this.currentType) {
-        console.log('测试');
         getCategoryDetail(key, type).then(res => {
           console.log(res);
           this.categoryDetail[type].page++
           this.categoryDetail[type].list.push(...res)
+
+          // 当数据请求成功后可以下拉刷新
+          this.$refs.scroll.finishPullUp()
         })
       },
 
       //切换左侧类别选项时,刷新右侧显示界面,并保存当前类别 key
       refreshDisplay(maitKey, miniWallkey) {
+        this.$refs.scroll.scrollTo(0, 0, 0)
         this.currentGoodsKey = miniWallkey
         this.getSubCategory(maitKey)
 
@@ -103,15 +108,33 @@
       // 改变商品顶部标签时
       changeTab(type) {
         this.currentType = type
-      }
+      },
+
+      //刷新可滚动页面长度
+      toRefresh() {
+        this.$refs.scroll.refresh()
+      },
     },
- 
-    //创建完成时获取类别数据
+
     created() {
+      //获取类别数据
       this.getCategory()
     },
+
     mounted() {
-      console.log(this.$refs);
+      //监听图片加载完成事件
+      this.$bus.$on('itemImgLoaded', this.toRefresh)
+    },
+
+    //进入页面的时候
+    activated() {
+      this.$refs.scroll.refresh()
+    },
+
+    //退出页面的时候
+    deactivated() {
+      // 清除所有监听
+      this.$bus.$off()
     }
   }
 
@@ -134,12 +157,13 @@
   }
 
   .scroll-list {
-    float: left;
     flex: 1;
   }
 
-  .scroll-display {
-    float: right;
+  .category-scroll {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
     flex: 3;
   }
 
