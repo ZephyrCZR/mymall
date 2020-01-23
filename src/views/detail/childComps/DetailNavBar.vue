@@ -22,16 +22,27 @@
   import NavBar from 'components/common/navbar/NavBar'
 
   export default {
-    name: 'DetailNavBar',
+    name: 'DetailNavBar', 
+
     components: {
       NavBar
     },
+
+    props: {
+      titles: {
+        type: Array,
+        default() {
+          return []
+        }
+      }
+    },
+
     data() {
       return {
-        titles: ['商品', '参数', '评论', '推荐'],
         currentIndex: 0
       }
     },
+
     methods: {
       itemClick(index) {
         this.currentIndex = index

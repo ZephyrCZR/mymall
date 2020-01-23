@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import { throttle } from "@/common/utils"
 
 export default {
   name: 'DetailGoodsInfo',
@@ -41,7 +40,7 @@ export default {
       //     clearTimeout(timer)
       //   }, 500);
       // }
-      this.$bus.$emit('itemImgLoaded')
+      this.$emit('imgLoaded')
     }    
   }
 }

@@ -3,10 +3,10 @@
     <detail-nav-bar class="detail-nav" ref="detailNav" :titles="navBarTitles" @navBarClick="navBarClick" />
     <scroll class="detail-scroll" ref="scroll" :probe-type="3" @scroll="onScroll">
       <h2 v-if="showErrorMessage" class="errMessage">Sorry, 找不到这件商品了</h2>
-      <detail-swiper :topImgs="topImages" @swiperLoaded.once="swiperLoaded" />
+      <detail-swiper :topImgs="topImages" @swiperLoaded.once="imgsLoaded" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
-      <detail-goods-info :detail="detail" @imgLoaded="imgLoaded" class="detail-goods-info" />
+      <detail-goods-info :detail="detail" @imgLoaded="imgsLoaded" class="detail-goods-info" />
       <detail-param-info :paramsInfo="paramsInfo" ref="params" />
       <detail-comment-info :commentInfo="commentInfo" ref="comment" />
       <goods-list :goods="recommends" class="recommend" ref="recommend" />
@@ -38,9 +38,12 @@
   } from "network/detail"
 
   import {
-    itemListenerMixin,
     backTopButton
   } from "common/mixin"
+
+  import {
+    debounce
+  } from "common/utils"
 
   import {
     mapActions
@@ -63,7 +66,7 @@
       GoodsList,
     },
 
-    mixins: [itemListenerMixin, backTopButton],
+    mixins: [backTopButton],
 
     data() {
       return {
@@ -78,34 +81,34 @@
         anchors: [],
         clearId: null,
         navBarTitles: [],
-        showErrorMessage: false
+        showErrorMessage: false,
+        toRefresh: null
       }
     },
 
     methods: {
       ...mapActions(['addCart']),
 
-      swiperLoaded() {
-        this.$refs.scroll.refresh()
-      },
-
-      imgLoaded() {
-        this.$refs.scroll.refresh()
+      imgsLoaded() {
+        this.toRefresh()
       },
 
       resetAnchors() {
-        if (this.$refs.params && this.$refs.comment && this.$refs.recommend) {
-          this.anchors = []
-          this.anchors.push(0)
-          this.anchors.push(this.$refs.params.$el.offsetTop)
-          this.anchors.push(this.$refs.comment.$el.offsetTop)
-          this.anchors.push(this.$refs.recommend.$el.offsetTop)
-        }
+        this.anchors = []
+        this.anchors.push(0)
+        this.$refs.params.$el.offsetTop && this.anchors.push(this.$refs.params.$el.offsetTop - 44)
+        this.$refs.comment.$el.offsetTop && this.anchors.push(this.$refs.comment.$el.offsetTop - 44)
+        this.$refs.recommend.$el.offsetTop && this.anchors.push(this.$refs.recommend.$el.offsetTop - 44)
+      },
+
+      screenRefresh() {
+        this.$refs.scroll.refresh()
+        this.resetAnchors()
       },
 
       navBarClick(index) {
-        this.resetAnchors()
-        this.$refs.scroll.scrollTo(0, -this.anchors[index], 100)
+        // this.resetAnchors()
+        this.$refs.scroll.scrollTo(0, -this.anchors[index], 200)
       },
 
       onScroll(position) {
@@ -117,7 +120,7 @@
         } else if (topY < this.anchors[3]) {
           this.$refs.detailNav.currentIndex = 2
         } else {
-          this.$refs.detailNav.currentIndex = 3
+          this.$refs.detailNav.currentIndex = this.anchors.length - 1
         }
 
         //监听是否显示backTop按钮
@@ -148,37 +151,36 @@
       // 2.根据iid请求详情数据
       getDetail(this.iid).then((res) => {
         const info = res.result
-        console.log(info);
+
         // 1.获取轮播图数据
         this.topImages = info.itemInfo.topImages
 
         //2.获取商品信息
         this.goods = new GoodsInfo(info.itemInfo, info.columns, info.shopInfo.services)
-        console.log('goods:', this.goods);
+
         //3.创建店铺信息的对象
         this.shop = new Shop(info.shopInfo)
 
         //4.获取商品信息
         this.detail = info.detailInfo
-      
+
         //5.获取参数信息
         this.paramsInfo = new GoodsParam(info.itemParams.info, info.itemParams.rule)
-          console.log('params:', this.paramsInfo);
+
         //6.取出评论信息
         if (info.rate.cRate !== 0) {
           this.commentInfo = info.rate.list[0]
-          console.log('comment:',this.commentInfo);
         }
 
-        //7.获取顶部导航栏标题
-        Object.keys(this.commentInfo).length !== 0 && this.navBarTitles.unshift('评论')       
-        Object.keys(this.paramsInfo).length !== 0 && this.navBarTitles.unshift('参数')
-        Object.keys(this.goods).length !== 0 && this.navBarTitles.unshift('商品')        
-                   
       }).catch((err) => {
-         //8. 显示找不到商品的错误提示信息
+        //8. 显示找不到商品的错误提示信息
         Object.keys(this.goods).length === 0 && (this.showErrorMessage = true)
         console.log(err)
+      }).then(() => {
+        //获取顶部导航栏标题
+        Object.keys(this.commentInfo).length !== 0 && this.navBarTitles.unshift('评论')
+        Object.keys(this.paramsInfo).length !== 0 && this.navBarTitles.unshift('参数')
+        Object.keys(this.goods).length !== 0 && this.navBarTitles.unshift('商品')
       })
 
       //请求推荐数据
@@ -191,19 +193,8 @@
     },
 
     mounted() {
-      //定时获取锚点位置,下次改成监听图片加载
-      this.clearId = setTimeout(() => {
-        this.resetAnchors()
-        clearTimeout(this.clearId)
-      }, 3000);
-    },
-
-    beforeDestroy() {
-      if (this.clearId) {
-        clearTimeout(this.clearId)
-      }
-    },
-    
+      this.toRefresh = debounce(this.screenRefresh, 100)
+    }
   }
 
 </script>
