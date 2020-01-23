@@ -1,7 +1,8 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav" ref="detailNav" @navBarClick="navBarClick" />
+    <detail-nav-bar class="detail-nav" ref="detailNav" :titles="navBarTitles" @navBarClick="navBarClick" />
     <scroll class="detail-scroll" ref="scroll" :probe-type="3" @scroll="onScroll">
+      <h2 v-if="showErrorMessage" class="errMessage">Sorry, 找不到这件商品了</h2>
       <detail-swiper :topImgs="topImages" @swiperLoaded.once="swiperLoaded" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
@@ -27,7 +28,6 @@
 
   import Scroll from 'components/common/scroll/Scroll'
   import GoodsList from 'components/content/goods/GoodsList'
-
 
   import {
     getDetail,
@@ -77,7 +77,8 @@
         recommends: [],
         anchors: [],
         clearId: null,
-
+        navBarTitles: [],
+        showErrorMessage: false
       }
     },
 
@@ -87,9 +88,11 @@
       swiperLoaded() {
         this.$refs.scroll.refresh()
       },
+
       imgLoaded() {
         this.$refs.scroll.refresh()
       },
+
       resetAnchors() {
         if (this.$refs.params && this.$refs.comment && this.$refs.recommend) {
           this.anchors = []
@@ -99,10 +102,12 @@
           this.anchors.push(this.$refs.recommend.$el.offsetTop)
         }
       },
+
       navBarClick(index) {
         this.resetAnchors()
         this.$refs.scroll.scrollTo(0, -this.anchors[index], 100)
       },
+
       onScroll(position) {
         const topY = -position.y
         if (this.anchors.length === 0 || topY < this.anchors[1]) {
@@ -118,6 +123,7 @@
         //监听是否显示backTop按钮
         this.showBackTopBtnListener(topY)
       },
+
       addToCart() {
         //1.获取购物车需要展示的信息
         const product = {}
@@ -130,15 +136,11 @@
 
         // 2.将商品添加到购物车
         this.addCart(product).then(res => {
-          // console.log(res);
-          console.log(this.$toast);
           this.$toast.show(res, 2000)
         })
-        // this.$store.dispatch('addCart', product).then(res => {
-        //   console.log(res);
-        // })
       }
     },
+
     created() {
       //1.保存传入的iid
       this.iid = this.$route.params.iid
@@ -146,44 +148,48 @@
       // 2.根据iid请求详情数据
       getDetail(this.iid).then((res) => {
         const info = res.result
-
+        console.log(info);
         // 1.获取轮播图数据
         this.topImages = info.itemInfo.topImages
 
         //2.获取商品信息
         this.goods = new GoodsInfo(info.itemInfo, info.columns, info.shopInfo.services)
-
+        console.log('goods:', this.goods);
         //3.创建店铺信息的对象
         this.shop = new Shop(info.shopInfo)
 
         //4.获取商品信息
         this.detail = info.detailInfo
-
+      
         //5.获取参数信息
         this.paramsInfo = new GoodsParam(info.itemParams.info, info.itemParams.rule)
-
+          console.log('params:', this.paramsInfo);
         //6.取出评论信息
         if (info.rate.cRate !== 0) {
           this.commentInfo = info.rate.list[0]
+          console.log('comment:',this.commentInfo);
         }
 
-        // this.$nextTick(() => {
-        //   this.resetAnchors()
-        // })
-        //这个做法不好用
-
+        //7.获取顶部导航栏标题
+        Object.keys(this.commentInfo).length !== 0 && this.navBarTitles.unshift('评论')       
+        Object.keys(this.paramsInfo).length !== 0 && this.navBarTitles.unshift('参数')
+        Object.keys(this.goods).length !== 0 && this.navBarTitles.unshift('商品')        
+                   
       }).catch((err) => {
+         //8. 显示找不到商品的错误提示信息
+        Object.keys(this.goods).length === 0 && (this.showErrorMessage = true)
         console.log(err)
       })
 
       //请求推荐数据
       getRecommend().then((res) => {
         this.recommends = res.data.list
+        Object.keys(this.recommends).length !== 0 && this.navBarTitles.push('推荐')
       }).catch((err) => {
         console.log(err);
       })
-
     },
+
     mounted() {
       //定时获取锚点位置,下次改成监听图片加载
       this.clearId = setTimeout(() => {
@@ -191,11 +197,13 @@
         clearTimeout(this.clearId)
       }, 3000);
     },
+
     beforeDestroy() {
       if (this.clearId) {
         clearTimeout(this.clearId)
       }
-    }
+    },
+    
   }
 
 </script>
@@ -224,6 +232,12 @@
 
   .recommend {
     padding-bottom: 49px;
+  }
+
+  .errMessage {
+    width: 100%;
+    text-align: center;
+    padding: 30px 0;
   }
 
 </style>

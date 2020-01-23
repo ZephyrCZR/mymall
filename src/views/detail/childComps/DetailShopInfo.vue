@@ -23,15 +23,11 @@
             <span :style="{ backgroundColor: currentCol(item.score) }">{{item.score | grade}}</span>
           </span>
         </div>
-
       </div>
     </div>
     <div class="in-to">
       <div class="in-to-btn">进店逛逛</div>
     </div>
-  </div>
-  <div v-else>
-    <h2 class="errMessage">Sorry, 该商品已下架</h2>
   </div>
 </template>
 
@@ -54,15 +50,11 @@
         return score > 4.9 ? '高' : score > 4.7 ? '中' : '低';
       }
     },
-    computed: {
-
-    },
     methods: {
       currentCol(score) {
         return score > 4.9 ? '#fb4e4e' : score > 4.7 ? '#f7ac13' : '#2ea635';
-      }
-    }
-
+      }      
+    },
   }
 
 </script>
@@ -177,12 +169,6 @@
     line-height: 26px;
     font-size: 14px;
     margin-top: 10px;
-  }
-
-  .errMessage {
-    width: 100%;
-    text-align: center;
-    padding: 30px 0;
   }
 
 </style>
