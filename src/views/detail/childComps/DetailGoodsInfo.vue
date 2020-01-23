@@ -31,17 +31,18 @@ export default {
     }
   },
   methods: {
-    // 节流
     imgLoaded() {
-      if(!this.isClock) {
-        this.$emit('imgLoaded')
-        this.isClock = true
-        let timer = setTimeout(() => {
-          this.isClock = false
-          clearTimeout(timer)
-        }, 500);
-      }
-    }
+      // if(!this.isClock) {
+      //   this.$emit('imgLoaded')
+      //   console.log('发射');
+      //   this.isClock = true
+      //   let timer = setTimeout(() => {
+      //     this.isClock = false
+      //     clearTimeout(timer)
+      //   }, 500);
+      // }
+      this.$bus.$emit('itemImgLoaded')
+    }    
   }
 }
 </script>

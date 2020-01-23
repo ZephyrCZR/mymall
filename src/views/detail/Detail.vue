@@ -1,22 +1,17 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav" 
-                    ref="detailNav"
-                    @navBarClick="navBarClick" />
-    <scroll class="detail-scroll" 
-            ref="scroll"
-            :probe-type="3" 
-            @scroll="onScroll">
-      <detail-swiper :topImgs="topImages" @swiperLoaded.once="swiperLoaded"></detail-swiper>
-      <detail-base-info :goods="goods"></detail-base-info>
-      <detail-shop-info :shop="shop"></detail-shop-info>
-      <detail-goods-info :detail="detail" @imgLoaded="imgLoaded" class="detail-goods-info"></detail-goods-info>
-      <detail-param-info :paramsInfo="paramsInfo" ref="params"></detail-param-info>
-      <detail-comment-info :commentInfo="commentInfo" ref="comment"></detail-comment-info>
-      <goods-list :goods="recommends" class="recommend" ref="recommend"></goods-list>
+    <detail-nav-bar class="detail-nav" ref="detailNav" @navBarClick="navBarClick" />
+    <scroll class="detail-scroll" ref="scroll" :probe-type="3" @scroll="onScroll">
+      <detail-swiper :topImgs="topImages" @swiperLoaded.once="swiperLoaded" />
+      <detail-base-info :goods="goods" />
+      <detail-shop-info :shop="shop" />
+      <detail-goods-info :detail="detail" @imgLoaded="imgLoaded" class="detail-goods-info" />
+      <detail-param-info :paramsInfo="paramsInfo" ref="params" />
+      <detail-comment-info :commentInfo="commentInfo" ref="comment" />
+      <goods-list :goods="recommends" class="recommend" ref="recommend" />
     </scroll>
-    <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
-    <back-top @click.native="backTopClick" v-show="showBackTopBtn"></back-top>
+    <detail-bottom-bar @addToCart="addToCart" />
+    <back-top @click.native="backTopClick" v-show="showBackTopBtn" />
   </div>
 </template>
 
@@ -32,7 +27,7 @@
 
   import Scroll from 'components/common/scroll/Scroll'
   import GoodsList from 'components/content/goods/GoodsList'
-  
+
 
   import {
     getDetail,
@@ -47,7 +42,9 @@
     backTopButton
   } from "common/mixin"
 
-  import { mapActions } from "vuex"
+  import {
+    mapActions
+  } from "vuex"
 
   export default {
     name: 'Detail',
@@ -79,8 +76,8 @@
         commentInfo: {},
         recommends: [],
         anchors: [],
-        clearId:null,
-        
+        clearId: null,
+
       }
     },
 
@@ -94,7 +91,7 @@
         this.$refs.scroll.refresh()
       },
       resetAnchors() {
-        if (this.$refs.params&&this.$refs.comment&&this.$refs.recommend) {
+        if (this.$refs.params && this.$refs.comment && this.$refs.recommend) {
           this.anchors = []
           this.anchors.push(0)
           this.anchors.push(this.$refs.params.$el.offsetTop)
@@ -107,7 +104,7 @@
         this.$refs.scroll.scrollTo(0, -this.anchors[index], 100)
       },
       onScroll(position) {
-        const topY=-position.y
+        const topY = -position.y
         if (this.anchors.length === 0 || topY < this.anchors[1]) {
           this.$refs.detailNav.currentIndex = 0
         } else if (topY < this.anchors[2]) {
@@ -132,7 +129,7 @@
         product.checked = this.checked
 
         // 2.将商品添加到购物车
-         this.addCart(product).then(res => {
+        this.addCart(product).then(res => {
           // console.log(res);
           console.log(this.$toast);
           this.$toast.show(res, 2000)
@@ -140,8 +137,6 @@
         // this.$store.dispatch('addCart', product).then(res => {
         //   console.log(res);
         // })
-        
-        
       }
     },
     created() {
@@ -150,7 +145,6 @@
 
       // 2.根据iid请求详情数据
       getDetail(this.iid).then((res) => {
-        console.log('详细信息:',res);
         const info = res.result
 
         // 1.获取轮播图数据
@@ -188,8 +182,6 @@
       }).catch((err) => {
         console.log(err);
       })
-
-      
 
     },
     mounted() {
@@ -229,7 +221,9 @@
     left: 0;
     right: 0;
   }
+
   .recommend {
     padding-bottom: 49px;
   }
+
 </style>

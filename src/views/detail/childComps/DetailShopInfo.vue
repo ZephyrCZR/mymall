@@ -1,5 +1,5 @@
 <template>
-  <div id="shop-info">
+  <div id="shop-info" v-if="Object.keys(shop).length !== 0">
     <div class="seller-info">
       <img :src="shop.logo" alt="头像">
       <span>{{shop.name}}</span>
@@ -23,49 +23,48 @@
             <span :style="{ backgroundColor: currentCol(item.score) }">{{item.score | grade}}</span>
           </span>
         </div>
-        
+
       </div>
     </div>
     <div class="in-to">
       <div class="in-to-btn">进店逛逛</div>
     </div>
   </div>
+  <div v-else>
+    <h2 class="errMessage">Sorry, 该商品已下架</h2>
+  </div>
 </template>
 
 <script>
-export default {
-  name: 'DetailShopInfo',
-  data(){
-    return {
-      // currentCol: 'blue'
-    }
-  },
-  props: {
-    shop: {
-      type: Object,
-      default() {
-        return {}
+  export default {
+    name: 'DetailShopInfo',
+    props: {
+      shop: {
+        type: Object,
+        default () {
+          return {}
+        }
+      }
+    },
+    filters: {
+      numF(num) {
+        return num > 10000 ? (num / 10000).toFixed(1) + '万' : num
+      },
+      grade(score) {
+        return score > 4.9 ? '高' : score > 4.7 ? '中' : '低';
+      }
+    },
+    computed: {
+
+    },
+    methods: {
+      currentCol(score) {
+        return score > 4.9 ? '#fb4e4e' : score > 4.7 ? '#f7ac13' : '#2ea635';
       }
     }
-  },
-  filters: {
-    numF(num) {
-      return num > 10000 ? (num / 10000).toFixed(1) + '万' : num
-    },
-    grade(score) {
-      return score > 4.9 ? '高' : score > 4.7 ? '中' :'低';
-    }
-  },
-  computed: {
-    
-  },
-  methods: {
-    currentCol(score) {
-      return score > 4.9 ? '#fb4e4e' : score > 4.7 ? '#f7ac13' : '#2ea635';
-    }
+
   }
 
-}
 </script>
 
 <style scoped>
@@ -78,38 +77,44 @@ export default {
     display: flex;
     padding-bottom: 20px;
   }
-  .seller-info img{
+
+  .seller-info img {
     display: inline-block;
     width: 50px;
     height: 50px;
     box-shadow: 0 0 2px #aaaaaa;
     border-radius: 50%;
   }
+
   .seller-info span {
     display: inline-block;
     line-height: 50px;
-    padding-left: 8px; 
+    padding-left: 8px;
   }
+
   .shop-status {
-    display:flex;
+    display: flex;
     font-weight: 400;
     text-align: center;
   }
-  .status-left{
+
+  .status-left {
     flex: 1;
     display: flex;
     padding: 4px 0;
     height: 50px;
     margin: auto;
   }
+
   .status-left span {
     display: block;
   }
 
   .count {
     font-size: 18px;
-    padding-bottom: 8px; 
+    padding-bottom: 8px;
   }
+
   .char {
     font-size: 14px;
   }
@@ -120,13 +125,14 @@ export default {
     text-align: center;
     padding-left: 15px;
   }
+
   .goods {
     flex: 1;
     display: inline-block;
     text-align: center;
-    padding:0 15px 0 0;
+    padding: 0 15px 0 0;
     border-right: 1px solid #dddddd;
-  } 
+  }
 
   .status-right {
     flex: 1;
@@ -137,23 +143,27 @@ export default {
     display: flex;
     padding: 5px;
   }
-  .score>span{
+
+  .score>span {
     flex: 1;
     text-align: right;
-    
+
   }
+
   .score>span:nth-of-type(2) {
     display: flex;
   }
-  .score>span>span:nth-of-type(1){
+
+  .score>span>span:nth-of-type(1) {
     flex: 1;
     text-align: left;
     padding-left: 20px;
   }
-  .score>span>span:nth-of-type(2){
-  text-align: right;
-  margin-right: 5px;
-  color: white;
+
+  .score>span>span:nth-of-type(2) {
+    text-align: right;
+    margin-right: 5px;
+    color: white;
   }
 
   .in-to-btn {
@@ -168,4 +178,11 @@ export default {
     font-size: 14px;
     margin-top: 10px;
   }
+
+  .errMessage {
+    width: 100%;
+    text-align: center;
+    padding: 30px 0;
+  }
+
 </style>
