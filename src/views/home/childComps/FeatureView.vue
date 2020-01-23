@@ -1,14 +1,19 @@
 <template>
   <div class="feature">
     <a href="#">
-      <img src="~assets/img/home/recommend_bg.jpg" alt="">
+      <img src="~assets/img/home/recommend_bg.jpg" @load="imgLoaded">
     </a>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'FeatureView'
+  name: 'FeatureView',
+  methods:{
+    imgLoaded() {
+      this.$emit('featureLoaded')
+    }
+  }
 }
 </script>
 

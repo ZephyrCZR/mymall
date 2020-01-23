@@ -8,9 +8,9 @@
               :pull-up-load="true"
               @scroll="onScroll"
               @pullingUp="loadMore"> 
-        <home-swiper :banners="banners" @swiperLoaded="swiperLoaded"/>
-        <home-recommend-view :recommends="recommends"/>
-        <feature-view/>
+        <home-swiper :banners="banners" @swiperLoaded="imgLoadedListener"/>
+        <home-recommend-view @recommendLoaded="imgLoadedListener" :recommends="recommends"/>
+        <feature-view @featureLoaded="imgLoadedListener"/>
         <tab-control ref="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
         <goods-list :goods="showGoods"/>
         <loading/>
@@ -62,7 +62,8 @@ export default {
       index: 0,
       showTabControl: false,
       offsetTop: 0,
-      lastPositionY: 0
+      lastPositionY: 0,
+      eventTime: 0
     }
   },
 
@@ -107,9 +108,24 @@ export default {
       this.getHomeGoods(this.currentType)
     },
 
-    swiperLoaded() {
-      // 获取tabControl相对位置，44为navbar高度
-      this.offsetTop = this.$refs.tabControl.$el.offsetTop - 44
+    // swiperLoaded() {
+    //   // 获取tabControl相对位置，44为navbar高度
+    //   this.offsetTop = this.$refs.tabControl.$el.offsetTop - 44
+    // },
+    // featureLoaded() {
+
+    // },
+    // recommendLoaded() {
+
+    // }
+    imgLoadedListener() {
+      console.log('outter');
+      if (++this.eventTime === 3) {     
+        // 获取tabControl相对位置，44为navbar高度
+        this.offsetTop = this.$refs.tabControl.$el.offsetTop - 44
+        console.log("inner");
+      }
+
     }
   },
 
