@@ -91,6 +91,7 @@ export default {
       this.index = index
       this.$refs.tabControl.currentIndex = index
       this.$refs.tabControlTop.currentIndex = index
+      this.$refs.scroll.scrollTo(0,-this.offsetTop,0)
     },
 
     onScroll(position) {
@@ -108,16 +109,6 @@ export default {
       this.getHomeGoods(this.currentType)
     },
 
-    // swiperLoaded() {
-    //   // 获取tabControl相对位置，44为navbar高度
-    //   this.offsetTop = this.$refs.tabControl.$el.offsetTop - 44
-    // },
-    // featureLoaded() {
-
-    // },
-    // recommendLoaded() {
-
-    // }
     imgLoadedListener() {
       console.log('outter');
       if (++this.eventTime === 3) {     
