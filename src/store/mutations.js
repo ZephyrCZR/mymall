@@ -1,6 +1,8 @@
 import {
   ADD_COUNTER,
+  SUB_COUNTER,
   ADD_NEW_PRODUCT,
+  REMOVE_PRODUCT,
   CHANGE_STATE,
   CHANGE_ALL_STATE
 } from "./mutation-types"
@@ -9,6 +11,11 @@ export default {
   // 添加商品的个数
   [ADD_COUNTER](state, payload) {
     payload.count++
+  },
+
+  //减少商品的个数
+  [SUB_COUNTER](state, payload) {
+    payload.count--
   },
 
   //添加新商品
@@ -27,6 +34,12 @@ export default {
     state.cartList.forEach((item) => {
       item.checked = payload
     })
+  },
+
+  //删除购物车中的商品
+  [REMOVE_PRODUCT](state, payload) {
+    const index = state.cartList.indexOf(payload)
+    state.cartList.splice(index, 1)
   }
 
 

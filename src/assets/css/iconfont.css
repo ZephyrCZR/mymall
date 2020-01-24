@@ -1,0 +1,37 @@
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1579847444867'); /* IE9 */
+  src: url('iconfont.eot?t=1579847444867#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAQAAAsAAAAACdwAAAOyAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDOAqGYIYZATYCJAMYCw4ABCAFhG0HVhu9CMgeh7FjeklGInKr4ise/lvjd9/M7H4RSarJJIqT8fQboUAUT6RCpkQ73S911sYKQ3maPkDVEZAtJyyPrHtgqJBboOmZiga4/E+aQxP9z7Hki8Kub2cHdGpZvWqgpAENqPv53ojC5xPjORC38erStwk0GxekOW7uHASjwrgoEHeZ1BwYU26lhhgabXXJnUV8AJ3G9FJ4ALz3fz7+i4eRpMqMd108bZKg9tcR79Ga0hqTeQ2sGS8I7j4yFoBC3JWGn0JheQHSrDRrbQKN5nGJX0cd975UoihHHNPupdyoWSv+5SVZURE1w9wK6wltqk5NYweFs9TAKamWY5CS+XVcSuHXexUi4M9vRReIYYD4RDALpaySzYEJq3VCq+t0es5OX6TAKc8s2w8CPD9gNjvsV4c0GvaLwxaLsur40W+vR169Gn7xYvDly6FAmVRCAfvifoiEsMojhO2SwTC7bRXa8v2GuuoF0lsRJ9hovM1TVN/BNd7BA9v8w4fWBgKHt/uGRpwlrc6ZGqlUNzYO0SZvD1U3hN820ncrY3Jz2THFsMXgtLeoBANl15YKJ08KS02Fq3TmxA3xXej2bQTDLloJPZ2F3TN7ujmjPyjjfdv7I5oj7OlFwD2Rnuj96OdI7ZM1O6izidbf6HB6H6E0M330/8QPRksPw8UvF7M1Pnni/J7z80lr8laDtaGz88bNRtuZvVtL/jvV1jZEx8WkLdnWFiltFWgNtgZdScPWJcKJE4JDXHriOFE4fvyIJcdPLI3vRLduIWLYySqhjyOwgvHlfCE8AeQV4X5a5yNO/kKD4IsGfZ5xVP41Wgr42XvdS9xFe/V/TKNo/oyalmuKqjM8dZEXtqcEaqcfspjQbPr4G9bp9mksa1/rbkKjvhiSBmOQNZpAFMwCVFpsQK3RHjSb13J/ix4MEqUJczYSCJ2uQdLuK2SdHiIK5iNU+n2FWmcgaHYvPE9sMRUZcwMjc5xIeH4pzoi0KFs+bg56+0lqIT/HkjpfMEyYmsnhWDiarbWQImFjXKMuSsU5l7HMaAE3k/eRfJ5ihdEsEXk4zblSHonIZZ8UFmkBzI4wxByOkGDzlsIyRFSR7G7PmXPf349IWZA3h9UsqMgOIxhV5vBYTFi0BaLFXGy14FqOVy2SEsdxMn2ejKEKsGYEibxZpjCl/LQsQsSFpXsUFeUi1EZyW3N4fmvhKR+AZsaH1JEiR4kq6mhQPZAkTvUSyRNO9IzICyoxqSmnyC9nVC/OFUWSBwAAAA==') format('woff2'),
+  url('iconfont.woff?t=1579847444867') format('woff'),
+  url('iconfont.ttf?t=1579847444867') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('iconfont.svg?t=1579847444867#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-addto:before {
+  content: "\e698";
+}
+
+.icon-delete:before {
+  content: "\e699";
+}
+
+.icon-refuse:before {
+  content: "\e69f";
+}
+
+.icon-selection:before {
+  content: "\e6a0";
+}
+
+.icon-cancel:before {
+  content: "\e6db";
+}
+

@@ -1,53 +1,60 @@
 <template>
   <div id="product-item">
     <div class="tick">
-      <tick-btn ref="tickBtn" @click.native="checkBoxClick" :isChecked="itemInfo.checked"/>
+      <tick-btn ref="tickBtn" @click.native="checkBoxClick" :isChecked="itemInfo.checked" />
     </div>
 
     <div class="product-img"><img :src="itemInfo.image" alt=""></div>
     <div class="product-info">
       <div class="product-title">{{itemInfo.title}}</div>
-      <div class="product-desc">{{itemInfo.desc}}</div>  
+      <div class="product-desc">{{itemInfo.desc}}</div>
       <div class="order-info">
         <span class="price">¥{{itemInfo.price}}</span>
-        <span class="count">x{{itemInfo.count}}</span>
+        <div class="counter">
+          <span class="iconfont icon-refuse countBtn" @click="subCounter"></span>
+          <input class="count" type="text" v-model="itemInfo.count">
+          <!-- <span class="count">{{itemInfo.count}}</span> -->
+          <span class="iconfont icon-addto countBtn" @click="addCounter"></span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import TickBtn from 'components/content/tickbtn/TickBtn'
+  import TickBtn from 'components/content/tickbtn/TickBtn'
 
-export default {
-  name: 'CartProductItem',
-  components:{
-    TickBtn
-  },
+  export default {
+    name: 'CartProductItem',
+    components: {
+      TickBtn
+    },
 
-  props: {
-    itemInfo: {
-      type: Object,
-      default() {
-        return {}
+    props: {
+      itemInfo: {
+        type: Object,
+        default () {
+          return {}
+        }
       }
-    }
-  },
-  
-  methods: {
-    //选择按钮的触发事件和状态
-    checkBoxClick() {
-      this.$store.dispatch('handleCart',this.itemInfo)
-    }
-  },
+    },
 
-  // updated() {
-    //改变商品选中状态
-    // this.$refs.tickBtn.isChecked = this.itemInfo.checked
-  // }
-  
+    methods: {
+      //选择按钮的触发事件和状态
+      checkBoxClick() {
+        this.$store.dispatch('handleCart', this.itemInfo)
+      },
+      addCounter() {
+        this.$store.dispatch('addCart', this.itemInfo)
+      },
+      subCounter() {
+        this.$store.dispatch('subCart', this.itemInfo)
+      }
+    },
 
-}
+
+  }
+
 </script>
 
 <style scoped>
@@ -58,6 +65,7 @@ export default {
     border-bottom: 1px solid #eee;
     margin: 0 10px;
   }
+
   .tick {
     height: 100%;
     width: 20px;
@@ -65,43 +73,43 @@ export default {
     align-items: center;
     justify-content: left;
   }
-  
+
   .product-img {
     flex: 3;
     overflow: hidden;
   }
+
   .product-img>img {
     height: 100%;
     width: 100%;
     border-radius: 5px;
   }
+
   .product-info {
-    /* background-color: cadetblue; */
     flex: 7;
     padding-left: 8px;
     position: relative;
   }
 
   .product-title {
-    /* background-color: aqua; */
     width: 60vw;
-    overflow: hidden; 
+    overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
     font-size: 14px;
     color: #333333;
   }
+
   .product-desc {
     font-size: 12px;
     width: 60vw;
-    overflow: hidden; 
+    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     line-height: 40px;
   }
 
   .order-info {
-    /* background-color: antiquewhite; */
     position: absolute;
     bottom: 0;
     left: 0;
@@ -109,11 +117,27 @@ export default {
     padding: 8px 0px 8px 8px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
+
   .price {
     color: #f54020
   }
+
   .count {
-    text-align: right;
+    text-align: center;
+    width: 25px;
+    border: none;
+    font-size: 15px;
   }
+
+  .counter {
+    display: flex;
+    align-items: center;
+  }
+
+  .countBtn {
+    font-size: 24px;
+  }
+
 </style>

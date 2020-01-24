@@ -1,6 +1,8 @@
 import {
   ADD_COUNTER,
+  SUB_COUNTER,
   ADD_NEW_PRODUCT,
+  REMOVE_PRODUCT,
   CHANGE_STATE,
   CHANGE_ALL_STATE
 } from "./mutation-types"
@@ -22,6 +24,15 @@ export default {
       }
     })
   },
+  subCart(context, payload) {
+    //1.查找数组中是否存在此商品
+    let oldProduct = context.state.cartList.find(item => item.iid === payload.iid)
+
+    //2.判断oldProduct是否取到值并且数量大于1
+    if (oldProduct && oldProduct.count>1) {
+      context.commit(SUB_COUNTER, oldProduct)
+    }
+  },
   // 购物车选中商品
   handleCart(context, payload) {
     context.commit(CHANGE_STATE, payload)
@@ -31,5 +42,4 @@ export default {
     context.commit(CHANGE_ALL_STATE, payload)
   }
   
-
 }
