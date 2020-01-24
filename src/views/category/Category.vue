@@ -125,7 +125,10 @@
       this.getCategory()
     },
 
-    //退出页面的时候
+    activated() {
+      this.$refs.scroll.refresh()
+    },
+    
     deactivated() {
       // 清除所有监听
       this.$bus.$off('itemImgLoaded', this.itemImgListener)
