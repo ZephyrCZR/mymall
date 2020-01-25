@@ -1,24 +1,29 @@
 <template>
-  <div id="product-item">
-    <div class="tick">
-      <tick-btn ref="tickBtn" @click.native="checkBoxClick" :isChecked="itemInfo.checked" />
-    </div>
-
-    <div class="product-img"><img :src="itemInfo.image" alt=""></div>
-    <div class="product-info">
-      <div class="product-title">{{itemInfo.title}}</div>
-      <div class="product-desc">{{itemInfo.desc}}</div>
-      <div class="order-info">
-        <span class="price">¥{{itemInfo.price}}</span>
-        <div class="counter">
-          <span class="iconfont icon-refuse countBtn" @click="subCounter"></span>
-          <input class="count" type="text" v-model="itemInfo.count">
-          <!-- <span class="count">{{itemInfo.count}}</span> -->
-          <span class="iconfont icon-addto countBtn" @click="addCounter"></span>
+  <div id="product-control">
+    <div id="product-item">
+      <div class="tick">
+        <tick-btn ref="tickBtn" @click.native="checkBoxClick" :isChecked="itemInfo.checked" />
+      </div>
+      <div class="product-img"><img :src="itemInfo.image" alt=""></div>
+      <div class="product-info">
+        <div class="product-title">{{itemInfo.title}}</div>
+        <div class="product-desc">{{itemInfo.desc}}</div>
+        <div class="order-info">
+          <span class="price">¥{{itemInfo.price}}</span>
+          <div class="counter">
+            <span class="iconfont icon-refuse countBtn" @click="subCounter"/>
+            <input class="count" type="text" v-model="itemInfo.count">
+            <span class="iconfont icon-addto countBtn" @click="addCounter"/>
+          </div>
         </div>
       </div>
     </div>
+    <div id="pullDelete">
+      <span class="iconfont icon-delete"/>
+      <span class="delete">删除</span>
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -58,7 +63,14 @@
 </script>
 
 <style scoped>
+  #product-control {
+    width: 200%;
+    display: flex;
+    transform: translateX(-200px)
+  }
+
   #product-item {
+    flex: 1;
     height: 120px;
     display: flex;
     padding: 8px 0;
@@ -138,6 +150,24 @@
 
   .countBtn {
     font-size: 24px;
+  }
+
+  #pullDelete {
+    flex: 1; 
+    margin: 0 10px;
+    background: #fa5421;
+    line-height: 120px;
+    color: #fff;
+    padding-left: 26px;
+    display: flex;
+    align-items: center;
+  }
+
+  .icon-delete { 
+    font-size: 32px;
+  }
+  .delete {
+    font-size: 23px;
   }
 
 </style>

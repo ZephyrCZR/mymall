@@ -40,6 +40,15 @@ export default {
   // 购物车全选商品
   handleCartAll(context, payload) {
     context.commit(CHANGE_ALL_STATE, payload)
+  },
+
+  // 移除购物车中的商品
+  removeCartProduct(context, payload) {
+    const product = context.state.cartList.find(item => item.iid === payload.iid)
+    if (product) {
+      context.commit(REMOVE_PRODUCT, product)
+    }
+    
   }
   
 }

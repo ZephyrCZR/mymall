@@ -7,13 +7,12 @@ export const itemListenerMixin = {
   },
 
   mounted() {
-     // 刷新可滚动页面长度
+    // 刷新可滚动页面长度
     // const refresh = debounce(this.$refs.scroll.refresh,200)
-    const refresh = throttle(this.$refs.scroll.refresh,200)
+    const refresh = throttle(this.$refs.scroll.refresh,100)
 
      this.itemImgListener = () => {
        refresh()
-       console.log('hhh');
      }
      this.$bus.$on('itemImgLoaded', this.itemImgListener)
   }
