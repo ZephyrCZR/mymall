@@ -18,10 +18,10 @@
         </div>
       </div>
     </div>
-    <div id="pullDelete">
+    <!-- <div id="pullDelete">
       <span class="iconfont icon-delete"/>
       <span class="delete">删除</span>
-    </div>
+    </div> -->
   </div>
 
 </template>
@@ -64,9 +64,9 @@
 
 <style scoped>
   #product-control {
-    width: 200%;
+    /* width: 200%; */
     display: flex;
-    transform: translateX(-200px)
+    /* transform: translateX(-200px) */
   }
 
   #product-item {
@@ -152,7 +152,7 @@
     font-size: 24px;
   }
 
-  #pullDelete {
+  /* #pullDelete {
     flex: 1; 
     margin: 0 10px;
     background: #fa5421;
@@ -164,10 +164,10 @@
   }
 
   .icon-delete { 
-    font-size: 32px;
+    font-size: 24px;
   }
   .delete {
-    font-size: 23px;
-  }
+    font-size: 16px;
+  } */
 
 </style>

@@ -96,18 +96,18 @@
       resetAnchors() {
         this.anchors = []
         this.anchors.push(0)
-        this.$refs.params.$el.offsetTop && this.anchors.push(this.$refs.params.$el.offsetTop - 44)
-        this.$refs.comment.$el.offsetTop && this.anchors.push(this.$refs.comment.$el.offsetTop - 44)
-        this.$refs.recommend.$el.offsetTop && this.anchors.push(this.$refs.recommend.$el.offsetTop - 44)
+        this.$refs.params.$el.offsetTop && this.anchors.push(this.$refs.params.$el.offsetTop + 44)
+        this.$refs.comment.$el.offsetTop && this.anchors.push(this.$refs.comment.$el.offsetTop + 44)
+        this.$refs.recommend.$el.offsetTop && this.anchors.push(this.$refs.recommend.$el.offsetTop + 44)
       },
 
       screenRefresh() {
-        this.$refs.scroll.refresh()
-        this.resetAnchors()
+          this.$refs.scroll.refresh()
+          this.resetAnchors()
       },
 
       navBarClick(index) {
-        // this.resetAnchors()
+        this.screenRefresh()
         this.$refs.scroll.scrollTo(0, -this.anchors[index], 200)
       },
 
@@ -211,6 +211,7 @@
   .detail-scroll {
     height: 100%;
     overflow: hidden;
+    padding-top: 44px;
   }
 
   .detail-nav {
